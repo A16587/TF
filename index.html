@@ -9,6 +9,9 @@
 <link href="https://cdn.jsdelivr.net/npm/fontsource-cairo@latest/index.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
+/* هنا بتخش كل الـ CSS بتاعتك من غير أي تغيير، هي هي */
+/* أنا حاططها في أول الرد, بس عشان أختصرها هنا مش هكررها عشان الرد يبقى نظيف. */
+/* حافظ على كل الـ <style> زي ما هو من الكود القديم بتاعك */
 *{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.3) transparent}
 *::-webkit-scrollbar{width:6px;height:6px}
 *::-webkit-scrollbar-track{background:transparent}
@@ -195,62 +198,476 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 </div>
 </div>
+
 <script>
-// Security Configuration
-const _0x5a2b=['\x65\x6e\x63\x72\x79\x70\x74\x65\x64\x44\x61\x74\x61','\x53\x65\x63\x75\x72\x65\x4b\x65\x79\x32\x30\x32\x34\x53\x65\x63\x75\x72\x65','\x64\x72\x65\x61\x6d\x46\x61\x76\x6f\x72\x69\x74\x65\x73','\x75\x73\x65\x72\x50\x72\x6f\x66\x69\x6c\x65','\x64\x72\x65\x61\x6d\x43\x68\x61\x74\x73','\x45\x6e\x63\x72\x79\x70\x74\x69\x6f\x6e\x4b\x65\x79\x32\x30\x32\x34','\x70\x72\x6f\x66\x69\x6c\x65\x4d\x6f\x64\x61\x6c','\x63\x68\x61\x74\x43\x6f\x6e\x74\x61\x69\x6e\x65\x72','\x73\x65\x6e\x64\x42\x74\x6e','\x64\x72\x65\x61\x6d\x49\x6e\x70\x75\x74','\x63\x68\x61\x74\x4c\x69\x73\x74','\x73\x69\x64\x65\x62\x61\x72','\x62\x69\x72\x74\x68\x44\x61\x79','\x62\x69\x72\x74\x68\x4d\x6f\x6e\x74\x68','\x62\x69\x72\x74\x68\x59\x65\x61\x72','\x64\x69\x73\x70\x6c\x61\x79\x4e\x61\x6d\x65','\x64\x69\x73\x70\x6c\x61\x79\x42\x69\x72\x74\x68','\x75\x73\x65\x72\x4e\x61\x6d\x65','\x70\x72\x6f\x66\x69\x6c\x65\x56\x69\x65\x77','\x70\x72\x6f\x66\x69\x6c\x65\x45\x64\x69\x74','\x6d\x6f\x64\x61\x6c\x54\x69\x74\x6c\x65\x45\x64\x69\x74','\x6c\x6f\x61\x64\x43\x68\x61\x74','\x74\x6f\x67\x67\x6c\x65\x46\x61\x76\x6f\x72\x69\x74\x65','\x64\x65\x6c\x65\x74\x65\x43\x68\x61\x74','\x64\x65\x6c\x65\x74\x65\x41\x6c\x6c\x43\x68\x61\x74\x73','\x75\x73\x65\x48\x69\x6e\x74','\x68\x61\x6e\x64\x6c\x65\x53\x65\x6e\x64','\x73\x61\x76\x65\x50\x72\x6f\x66\x69\x6c\x65','\x70\x65\x72\x66\x6f\x72\x6d\x4c\x6f\x67\x6f\x75\x74','\x63\x6c\x6f\x73\x65\x50\x72\x6f\x66\x69\x6c\x65\x4d\x6f\x64\x61\x6c','\x6f\x70\x65\x6e\x50\x72\x6f\x66\x69\x6c\x65','\x73\x77\x69\x74\x63\x68\x54\x6f\x45\x64\x69\x74\x4d\x6f\x64\x65','\x6e\x65\x77\x43\x68\x61\x74','\x74\x6f\x67\x67\x6c\x65\x53\x69\x64\x65\x62\x61\x72'];
-const ENCRYPTION_KEY='EncryptionKey2024Secure';
-const SECURE_KEY='SecureKey2024Secure';
-function encryptData(data){try{return CryptoJS.AES.encrypt(JSON.stringify(data),ENCRYPTION_KEY).toString()}catch(e){return btoa(encodeURIComponent(JSON.stringify(data)))}}
-function decryptData(encrypted){try{const bytes=CryptoJS.AES.decrypt(encrypted,ENCRYPTION_KEY);return JSON.parse(bytes.toString(CryptoJS.enc.Utf8))}catch(e){try{return JSON.parse(decodeURIComponent(atob(encrypted)))}catch(e2){return null}}}
-function secureStorage(key,data){try{localStorage.setItem(key,encryptData(data));return true}catch(e){return false}}
-function secureRetrieve(key){try{const encrypted=localStorage.getItem(key);if(!encrypted)return null;return decryptData(encrypted)}catch(e){return null}}
-const dreamInput=document.getElementById('dreamInput');
-const chatContainer=document.getElementById('chatContainer');
-const sendBtn=document.getElementById('sendBtn');
-const hints=document.querySelectorAll('.hint');
-const sidebar=document.getElementById('sidebar');
-const chatList=document.getElementById('chatList');
-let isGenerating=false;
-let currentChatId=null;
-let chats=secureRetrieve('dreamChats')||[];
-let favorites=secureRetrieve('dreamFavorites')||[];
-let userProfile=secureRetrieve('userProfile')||null;
-const WEBHOOK_URL='https://kalmeron.app.n8n.cloud/webhook/dreem';
-function autoResizeTextarea(){dreamInput.style.height='auto';const newHeight=Math.min(dreamInput.scrollHeight,350);dreamInput.style.height=newHeight+'px';dreamInput.style.overflowY=dreamInput.scrollHeight>350?'auto':'hidden'}
-dreamInput.addEventListener('input',autoResizeTextarea);
-function saveData(){secureStorage('dreamChats',chats);secureStorage('dreamFavorites',favorites);if(userProfile)secureStorage('userProfile',userProfile)}
-function toggleSidebar(){sidebar.classList.toggle('open');if(sidebar.classList.contains('open'))renderChatList()}
-function renderChatList(){if(chats.length===0){chatList.innerHTML='<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';return}chatList.innerHTML=chats.map(chat=>`<div class="chat-item ${chat.id===currentChatId?'active':''}" onclick="loadChat('${chat.id}')"><div class="chat-item-content"><div class="chat-item-header"><div class="chat-item-title">${chat.title||'محادثة جديدة'}</div><i class="fas fa-star chat-item-favorite ${favorites.includes(chat.id)?'active':''}" onclick="event.stopPropagation(); toggleFavorite('${chat.id}')"></i></div><div class="chat-item-preview">${chat.messages[0]?.text||'لا توجد رسائل'}</div><div class="chat-item-footer"><div class="chat-item-date">${new Date(chat.date).toLocaleDateString('ar-EG')}</div><button class="chat-item-delete" onclick="event.stopPropagation(); deleteChat('${chat.id}')"><i class="fas fa-trash"></i></button></div></div></div>`).join('')}
-function getWelcomeMessage(){const namePart=userProfile&&userProfile.name?` ${userProfile.name}`:'';return`👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`}
-function updateWelcomeInCurrentChat(){const firstBot=chatContainer.querySelector('.bot-message');if(firstBot)firstBot.textContent=getWelcomeMessage()}
-function newChat(){const chatId='chat-'+Date.now();chats.unshift({id:chatId,title:'محادثة جديدة',messages:[],date:new Date().toISOString()});currentChatId=chatId;saveData();chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;renderChatList();if(window.innerWidth<=768)toggleSidebar()}
-function loadChat(chatId){currentChatId=chatId;const chat=chats.find(c=>c.id===chatId);if(!chat)return;if(chat.messages.length===0){chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`}else{chatContainer.innerHTML=chat.messages.map(msg=>`<div class="message-group"><div class="${msg.type==='user'?'user-message':'bot-message'}">${msg.text}</div></div>`).join('')}scrollToBottom(false);renderChatList();if(window.innerWidth<=768)toggleSidebar()}
-function toggleFavorite(chatId){const index=favorites.indexOf(chatId);if(index>-1)favorites.splice(index,1);else favorites.push(chatId);saveData();renderChatList()}
-function deleteChat(chatId){if(!confirm('هل أنت متأكد من حذف هذه المحادثة؟'))return;chats=chats.filter(c=>c.id!==chatId);favorites=favorites.filter(f=>f!==chatId);if(currentChatId===chatId){currentChatId=null;chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`}saveData();renderChatList()}
-function deleteAllChats(){if(!confirm('هل أنت متأكد من حذف جميع المحادثات؟'))return;chats=[];favorites=[];currentChatId=null;saveData();chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;renderChatList()}
-function scrollToBottom(smooth=true){setTimeout(()=>{chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:smooth?'smooth':'auto'});},10)}
-function useHint(text){if(isGenerating)return;dreamInput.value=text;autoResizeTextarea();dreamInput.focus()}
-function updateUIState(generating){isGenerating=generating;sendBtn.disabled=generating;hints.forEach(h=>h.classList.toggle('disabled-hint',generating));sendBtn.innerHTML=generating?'<i class="fas fa-spinner fa-spin"></i>':'<i class="fas fa-arrow-up"></i>'}
-function addMessageGroup(userText){const group=document.createElement('div');group.className='message-group';const userDiv=document.createElement('div');userDiv.className='user-message';userDiv.textContent=userText;const botDiv=document.createElement('div');botDiv.className='bot-message';group.append(userDiv,botDiv);chatContainer.appendChild(group);return botDiv}
-function showTypingIndicator(){const ind=document.createElement('div');ind.className='message-group';ind.id='typingIndicator';ind.innerHTML='<div class="typing-indicator"><span></span><span></span><span></span></div>';chatContainer.appendChild(ind);scrollToBottom(true)}
-function hideTypingIndicator(){const ind=document.getElementById('typingIndicator');if(ind)ind.remove()}
-async function typeMessage(element,text,speed=15){element.innerHTML='';for(let i=0;i<text.length;i++){element.innerHTML+=text[i];if(i%3===0)scrollToBottom(true);await new Promise(r=>setTimeout(r,speed))}scrollToBottom(true)}
-async function processMessage(messageText){showTypingIndicator();try{const response=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dream:messageText,userName:userProfile?.name||'زائر',birthDate:userProfile?.birthDate||'غير محدد'})});const responseText=await response.text();hideTypingIndicator();if(!response.ok){throw new Error(`فشل الطلب: ${response.status} - ${responseText}`)}if(!responseText||responseText.trim()===''){const defaultMessage='تم استلام حلمك بنجاح ✅ سيقوم المفسر بالرد قريباً.';const botElement=addMessageGroup(messageText);await typeMessage(botElement,defaultMessage,15);if(!currentChatId){currentChatId='chat-'+Date.now();chats.unshift({id:currentChatId,title:messageText.substring(0,30)+'...',messages:[],date:new Date().toISOString()})}const chat=chats.find(c=>c.id===currentChatId);if(chat){chat.messages.push({type:'user',text:messageText});chat.messages.push({type:'bot',text:defaultMessage});if(!chat.title||chat.title==='محادثة جديدة')chat.title=messageText.substring(0,30)+'...';saveData()}return}let interpretation=responseText;if(responseText.trim().startsWith('{')||responseText.trim().startsWith('[')){try{const data=JSON.parse(responseText);interpretation=data.interpretation||data.message||data.text||data.reply||data.response||JSON.stringify(data)}catch(e){console.log('النص مش JSON صحيح')}}const botElement=addMessageGroup(messageText);await typeMessage(botElement,interpretation,15);if(!currentChatId){currentChatId='chat-'+Date.now();chats.unshift({id:currentChatId,title:messageText.substring(0,30)+'...',messages:[],date:new Date().toISOString()})}const chat=chats.find(c=>c.id===currentChatId);if(chat){chat.messages.push({type:'user',text:messageText});chat.messages.push({type:'bot',text:interpretation});if(!chat.title||chat.title==='محادثة جديدة')chat.title=messageText.substring(0,30)+'...';saveData()}}catch(error){hideTypingIndicator();console.error('خطأ:',error);let errorMessage='❌ عذراً، حدث خطأ في الاتصال.\n🔍 التفاصيل: '+error.message;const botElement=addMessageGroup(messageText);await typeMessage(botElement,errorMessage,15)}}
-async function handleSend(){if(isGenerating)return;const dreamText=dreamInput.value.trim();if(!dreamText)return alert('اكتب حلمك أولاً');updateUIState(true);dreamInput.value='';autoResizeTextarea();await processMessage(dreamText);updateUIState(false);dreamInput.focus();renderChatList()}
-function populateDOBSelects(){const daySel=document.getElementById('birthDay');const monthSel=document.getElementById('birthMonth');const yearSel=document.getElementById('birthYear');daySel.innerHTML='<option value="">اليوم</option>';for(let d=1;d<=31;d++){const opt=document.createElement('option');opt.value=d;opt.textContent=d;daySel.appendChild(opt)}const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];monthSel.innerHTML='<option value="">الشهر</option>';for(let m=0;m<12;m++){const opt=document.createElement('option');opt.value=m+1;opt.textContent=months[m];monthSel.appendChild(opt)}const currentYear=new Date().getFullYear();yearSel.innerHTML='<option value="">السنة</option>';for(let y=currentYear;y>=1940;y--){const opt=document.createElement('option');opt.value=y;opt.textContent=y;yearSel.appendChild(opt)}}
-function openProfile(){const modal=document.getElementById('profileModal');if(!userProfile){document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='مرحباً! سجل بياناتك للبدء';document.getElementById('userName').value='';document.getElementById('birthDay').value='';document.getElementById('birthMonth').value='';document.getElementById('birthYear').value=''}else{document.getElementById('profileView').style.display='block';document.getElementById('profileEdit').style.display='none';document.getElementById('displayName').textContent=userProfile.name;document.getElementById('displayBirth').textContent=userProfile.birthDate}modal.style.display='flex'}
-function switchToEditMode(){document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='تعديل البيانات';if(userProfile){document.getElementById('userName').value=userProfile.name||'';if(userProfile.birthDate){const[d,m,y]=userProfile.birthDate.split('/');document.getElementById('birthDay').value=d||'';document.getElementById('birthMonth').value=m||'';document.getElementById('birthYear').value=y||''}}}
-function saveProfile(){const name=document.getElementById('userName').value.trim();const day=document.getElementById('birthDay').value;const month=document.getElementById('birthMonth').value;const year=document.getElementById('birthYear').value;if(!name)return alert('يرجى إدخال اسمك الكامل');if(!day||!month||!year)return alert('يرجى اختيار تاريخ الميلاد كاملاً');userProfile={name,birthDate:`${day}/${month}/${year}`};secureStorage('userProfile',userProfile);saveData();document.getElementById('profileModal').style.display='none';updateWelcomeInCurrentChat();alert('✅ تم حفظ بياناتك بنجاح!')}
-function performLogout(){if(!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.'))return;localStorage.removeItem('userProfile');localStorage.removeItem('dreamChats');localStorage.removeItem('dreamFavorites');userProfile=null;chats=[];favorites=[];currentChatId=null;document.getElementById('profileModal').style.display='none';updateWelcomeInCurrentChat();setTimeout(()=>{const modal=document.getElementById('profileModal');document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='مرحباً! سجل بياناتك للبدء';document.getElementById('userName').value='';document.getElementById('birthDay').value='';document.getElementById('birthMonth').value='';document.getElementById('birthYear').value='';modal.style.display='flex'},400)}
-function closeProfileModal(){document.getElementById('profileModal').style.display='none'}
-sendBtn.addEventListener('click',handleSend);
-dreamInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend()}});
+// Security Configuration (دي عادية)
+const ENCRYPTION_KEY = 'EncryptionKey2024Secure';
+const SECURE_KEY = 'SecureKey2024Secure';
+
+function encryptData(data) {
+    try {
+        return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
+    } catch (e) {
+        return btoa(encodeURIComponent(JSON.stringify(data)));
+    }
+}
+
+function decryptData(encrypted) {
+    try {
+        const bytes = CryptoJS.AES.decrypt(encrypted, ENCRYPTION_KEY);
+        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    } catch (e) {
+        try {
+            return JSON.parse(decodeURIComponent(atob(encrypted)));
+        } catch (e2) {
+            return null;
+        }
+    }
+}
+
+function secureStorage(key, data) {
+    try {
+        localStorage.setItem(key, encryptData(data));
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+function secureRetrieve(key) {
+    try {
+        const encrypted = localStorage.getItem(key);
+        if (!encrypted) return null;
+        return decryptData(encrypted);
+    } catch (e) {
+        return null;
+    }
+}
+
+// ------------------ التعديل الأهم هنا ------------------
+// 1. غيرنا رابط الويب هوك لرابط Cloudflare Worker الجديد
+const WORKER_PROXY_URL = 'https://sweet-sound-368d.ahmedragab6920.workers.dev/';
+// 2. الرقم السري (خليه هو هو الرقم اللي حطيته في كود الـ Worker)
+const SECRET_KEY = 'MySecretKey123456';
+// -------------------------------------------------------
+
+// بقية المتغيرات
+const dreamInput = document.getElementById('dreamInput');
+const chatContainer = document.getElementById('chatContainer');
+const sendBtn = document.getElementById('sendBtn');
+const hints = document.querySelectorAll('.hint');
+const sidebar = document.getElementById('sidebar');
+const chatList = document.getElementById('chatList');
+let isGenerating = false;
+let currentChatId = null;
+let chats = secureRetrieve('dreamChats') || [];
+let favorites = secureRetrieve('dreamFavorites') || [];
+let userProfile = secureRetrieve('userProfile') || null;
+
+// ------------------ دوالك ------------------
+function autoResizeTextarea() {
+    dreamInput.style.height = 'auto';
+    const newHeight = Math.min(dreamInput.scrollHeight, 350);
+    dreamInput.style.height = newHeight + 'px';
+    dreamInput.style.overflowY = dreamInput.scrollHeight > 350 ? 'auto' : 'hidden';
+}
+dreamInput.addEventListener('input', autoResizeTextarea);
+
+function saveData() {
+    secureStorage('dreamChats', chats);
+    secureStorage('dreamFavorites', favorites);
+    if (userProfile) secureStorage('userProfile', userProfile);
+}
+
+function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    if (sidebar.classList.contains('open')) renderChatList();
+}
+
+function renderChatList() {
+    if (chats.length === 0) {
+        chatList.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';
+        return;
+    }
+    chatList.innerHTML = chats.map(chat => `
+        <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
+            <div class="chat-item-content">
+                <div class="chat-item-header">
+                    <div class="chat-item-title">${chat.title || 'محادثة جديدة'}</div>
+                    <i class="fas fa-star chat-item-favorite ${favorites.includes(chat.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${chat.id}')"></i>
+                </div>
+                <div class="chat-item-preview">${chat.messages[0]?.text || 'لا توجد رسائل'}</div>
+                <div class="chat-item-footer">
+                    <div class="chat-item-date">${new Date(chat.date).toLocaleDateString('ar-EG')}</div>
+                    <button class="chat-item-delete" onclick="event.stopPropagation(); deleteChat('${chat.id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getWelcomeMessage() {
+    const namePart = userProfile && userProfile.name ? ` ${userProfile.name}` : '';
+    return `👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`;
+}
+
+function updateWelcomeInCurrentChat() {
+    const firstBot = chatContainer.querySelector('.bot-message');
+    if (firstBot) firstBot.textContent = getWelcomeMessage();
+}
+
+function newChat() {
+    const chatId = 'chat-' + Date.now();
+    chats.unshift({ id: chatId, title: 'محادثة جديدة', messages: [], date: new Date().toISOString() });
+    currentChatId = chatId;
+    saveData();
+    chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+    renderChatList();
+    if (window.innerWidth <= 768) toggleSidebar();
+}
+
+function loadChat(chatId) {
+    currentChatId = chatId;
+    const chat = chats.find(c => c.id === chatId);
+    if (!chat) return;
+    if (chat.messages.length === 0) {
+        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+    } else {
+        chatContainer.innerHTML = chat.messages.map(msg => `
+            <div class="message-group">
+                <div class="${msg.type === 'user' ? 'user-message' : 'bot-message'}">${msg.text}</div>
+            </div>
+        `).join('');
+    }
+    scrollToBottom(false);
+    renderChatList();
+    if (window.innerWidth <= 768) toggleSidebar();
+}
+
+function toggleFavorite(chatId) {
+    const index = favorites.indexOf(chatId);
+    if (index > -1) favorites.splice(index, 1);
+    else favorites.push(chatId);
+    saveData();
+    renderChatList();
+}
+
+function deleteChat(chatId) {
+    if (!confirm('هل أنت متأكد من حذف هذه المحادثة؟')) return;
+    chats = chats.filter(c => c.id !== chatId);
+    favorites = favorites.filter(f => f !== chatId);
+    if (currentChatId === chatId) {
+        currentChatId = null;
+        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+    }
+    saveData();
+    renderChatList();
+}
+
+function deleteAllChats() {
+    if (!confirm('هل أنت متأكد من حذف جميع المحادثات؟')) return;
+    chats = [];
+    favorites = [];
+    currentChatId = null;
+    saveData();
+    chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+    renderChatList();
+}
+
+function scrollToBottom(smooth = true) {
+    setTimeout(() => {
+        chatContainer.scrollTo({
+            top: chatContainer.scrollHeight,
+            behavior: smooth ? 'smooth' : 'auto'
+        });
+    }, 10);
+}
+
+function useHint(text) {
+    if (isGenerating) return;
+    dreamInput.value = text;
+    autoResizeTextarea();
+    dreamInput.focus();
+}
+
+function updateUIState(generating) {
+    isGenerating = generating;
+    sendBtn.disabled = generating;
+    hints.forEach(h => h.classList.toggle('disabled-hint', generating));
+    sendBtn.innerHTML = generating ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
+}
+
+function addMessageGroup(userText) {
+    const group = document.createElement('div');
+    group.className = 'message-group';
+    const userDiv = document.createElement('div');
+    userDiv.className = 'user-message';
+    userDiv.textContent = userText;
+    const botDiv = document.createElement('div');
+    botDiv.className = 'bot-message';
+    group.append(userDiv, botDiv);
+    chatContainer.appendChild(group);
+    return botDiv;
+}
+
+function showTypingIndicator() {
+    const ind = document.createElement('div');
+    ind.className = 'message-group';
+    ind.id = 'typingIndicator';
+    ind.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+    chatContainer.appendChild(ind);
+    scrollToBottom(true);
+}
+
+function hideTypingIndicator() {
+    const ind = document.getElementById('typingIndicator');
+    if (ind) ind.remove();
+}
+
+async function typeMessage(element, text, speed = 15) {
+    element.innerHTML = '';
+    for (let i = 0; i < text.length; i++) {
+        element.innerHTML += text[i];
+        if (i % 3 === 0) scrollToBottom(true);
+        await new Promise(r => setTimeout(r, speed));
+    }
+    scrollToBottom(true);
+}
+
+// ------------------ التعديل الأهم هنا ------------------
+async function processMessage(messageText) {
+    showTypingIndicator();
+    try {
+        // بنستخدم الرابط الجديد بتاع الـ Worker
+        const response = await fetch(WORKER_PROXY_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Secret-Key': SECRET_KEY // هنا بنضيف الرقم السري
+            },
+            body: JSON.stringify({
+                dream: messageText,
+                userName: userProfile?.name || 'زائر',
+                birthDate: userProfile?.birthDate || 'غير محدد'
+            })
+        });
+
+        const responseText = await response.text();
+        hideTypingIndicator();
+
+        if (!response.ok) {
+            throw new Error(`فشل الطلب: ${response.status} - ${responseText}`);
+        }
+
+        if (!responseText || responseText.trim() === '') {
+            const defaultMessage = 'تم استلام حلمك بنجاح ✅ سيقوم المفسر بالرد قريباً.';
+            const botElement = addMessageGroup(messageText);
+            await typeMessage(botElement, defaultMessage, 15);
+
+            if (!currentChatId) {
+                currentChatId = 'chat-' + Date.now();
+                chats.unshift({ id: currentChatId, title: messageText.substring(0, 30) + '...', messages: [], date: new Date().toISOString() });
+            }
+            const chat = chats.find(c => c.id === currentChatId);
+            if (chat) {
+                chat.messages.push({ type: 'user', text: messageText });
+                chat.messages.push({ type: 'bot', text: defaultMessage });
+                if (!chat.title || chat.title === 'محادثة جديدة') chat.title = messageText.substring(0, 30) + '...';
+                saveData();
+            }
+            return;
+        }
+
+        let interpretation = responseText;
+        if (responseText.trim().startsWith('{') || responseText.trim().startsWith('[')) {
+            try {
+                const data = JSON.parse(responseText);
+                interpretation = data.interpretation || data.message || data.text || data.reply || data.response || JSON.stringify(data);
+            } catch (e) {
+                console.log('النص مش JSON صحيح');
+            }
+        }
+
+        const botElement = addMessageGroup(messageText);
+        await typeMessage(botElement, interpretation, 15);
+
+        if (!currentChatId) {
+            currentChatId = 'chat-' + Date.now();
+            chats.unshift({ id: currentChatId, title: messageText.substring(0, 30) + '...', messages: [], date: new Date().toISOString() });
+        }
+        const chat = chats.find(c => c.id === currentChatId);
+        if (chat) {
+            chat.messages.push({ type: 'user', text: messageText });
+            chat.messages.push({ type: 'bot', text: interpretation });
+            if (!chat.title || chat.title === 'محادثة جديدة') chat.title = messageText.substring(0, 30) + '...';
+            saveData();
+        }
+
+    } catch (error) {
+        hideTypingIndicator();
+        console.error('خطأ:', error);
+        let errorMessage = '❌ عذراً، حدث خطأ في الاتصال.\n🔍 التفاصيل: ' + error.message;
+        const botElement = addMessageGroup(messageText);
+        await typeMessage(botElement, errorMessage, 15);
+    }
+}
+// -------------------------------------------------------
+
+async function handleSend() {
+    if (isGenerating) return;
+    const dreamText = dreamInput.value.trim();
+    if (!dreamText) return alert('اكتب حلمك أولاً');
+    updateUIState(true);
+    dreamInput.value = '';
+    autoResizeTextarea();
+    await processMessage(dreamText);
+    updateUIState(false);
+    dreamInput.focus();
+    renderChatList();
+}
+
+// ------------------ دوال الملف الشخصي ------------------
+function populateDOBSelects() {
+    const daySel = document.getElementById('birthDay');
+    const monthSel = document.getElementById('birthMonth');
+    const yearSel = document.getElementById('birthYear');
+    daySel.innerHTML = '<option value="">اليوم</option>';
+    for (let d = 1; d <= 31; d++) {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        daySel.appendChild(opt);
+    }
+    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    monthSel.innerHTML = '<option value="">الشهر</option>';
+    for (let m = 0; m < 12; m++) {
+        const opt = document.createElement('option');
+        opt.value = m + 1;
+        opt.textContent = months[m];
+        monthSel.appendChild(opt);
+    }
+    const currentYear = new Date().getFullYear();
+    yearSel.innerHTML = '<option value="">السنة</option>';
+    for (let y = currentYear; y >= 1940; y--) {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        yearSel.appendChild(opt);
+    }
+}
+
+function openProfile() {
+    const modal = document.getElementById('profileModal');
+    if (!userProfile) {
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('profileEdit').style.display = 'block';
+        document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
+        document.getElementById('userName').value = '';
+        document.getElementById('birthDay').value = '';
+        document.getElementById('birthMonth').value = '';
+        document.getElementById('birthYear').value = '';
+    } else {
+        document.getElementById('profileView').style.display = 'block';
+        document.getElementById('profileEdit').style.display = 'none';
+        document.getElementById('displayName').textContent = userProfile.name;
+        document.getElementById('displayBirth').textContent = userProfile.birthDate;
+    }
+    modal.style.display = 'flex';
+}
+
+function switchToEditMode() {
+    document.getElementById('profileView').style.display = 'none';
+    document.getElementById('profileEdit').style.display = 'block';
+    document.getElementById('modalTitleEdit').textContent = 'تعديل البيانات';
+    if (userProfile) {
+        document.getElementById('userName').value = userProfile.name || '';
+        if (userProfile.birthDate) {
+            const [d, m, y] = userProfile.birthDate.split('/');
+            document.getElementById('birthDay').value = d || '';
+            document.getElementById('birthMonth').value = m || '';
+            document.getElementById('birthYear').value = y || '';
+        }
+    }
+}
+
+function saveProfile() {
+    const name = document.getElementById('userName').value.trim();
+    const day = document.getElementById('birthDay').value;
+    const month = document.getElementById('birthMonth').value;
+    const year = document.getElementById('birthYear').value;
+    if (!name) return alert('يرجى إدخال اسمك الكامل');
+    if (!day || !month || !year) return alert('يرجى اختيار تاريخ الميلاد كاملاً');
+    userProfile = { name, birthDate: `${day}/${month}/${year}` };
+    secureStorage('userProfile', userProfile);
+    saveData();
+    document.getElementById('profileModal').style.display = 'none';
+    updateWelcomeInCurrentChat();
+    alert('✅ تم حفظ بياناتك بنجاح!');
+}
+
+function performLogout() {
+    if (!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.')) return;
+    localStorage.removeItem('userProfile');
+    localStorage.removeItem('dreamChats');
+    localStorage.removeItem('dreamFavorites');
+    userProfile = null;
+    chats = [];
+    favorites = [];
+    currentChatId = null;
+    document.getElementById('profileModal').style.display = 'none';
+    updateWelcomeInCurrentChat();
+    setTimeout(() => {
+        const modal = document.getElementById('profileModal');
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('profileEdit').style.display = 'block';
+        document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
+        document.getElementById('userName').value = '';
+        document.getElementById('birthDay').value = '';
+        document.getElementById('birthMonth').value = '';
+        document.getElementById('birthYear').value = '';
+        modal.style.display = 'flex';
+    }, 400);
+}
+
+function closeProfileModal() {
+    document.getElementById('profileModal').style.display = 'none';
+}
+
+// ------------------ الأحداث (Event Listeners) ------------------
+sendBtn.addEventListener('click', handleSend);
+dreamInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+    }
+});
+
 populateDOBSelects();
-if(chats.length===0)newChat();
-window.addEventListener('load',()=>{autoResizeTextarea();scrollToBottom(false);renderChatList();if(userProfile){updateWelcomeInCurrentChat()}else{const modal=document.getElementById('profileModal');document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='مرحباً! سجل بياناتك للبدء';modal.style.display='flex'}});
-document.addEventListener('contextmenu',event=>event.preventDefault());
-document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.shiftKey&&e.key==='I'){e.preventDefault();return false}if(e.ctrlKey&&e.key==='U'){e.preventDefault();return false}if(e.key==='F12'){e.preventDefault();return false}});
+if (chats.length === 0) newChat();
+
+window.addEventListener('load', () => {
+    autoResizeTextarea();
+    scrollToBottom(false);
+    renderChatList();
+    if (userProfile) {
+        updateWelcomeInCurrentChat();
+    } else {
+        const modal = document.getElementById('profileModal');
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('profileEdit').style.display = 'block';
+        document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
+        modal.style.display = 'flex';
+    }
+});
+
+// منع حفظ الصفحة أو فتح أدوات المطور
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.key === 'U') { e.preventDefault(); return false; }
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+});
+
 </script>
 </body>
 </html>
-
