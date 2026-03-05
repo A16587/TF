@@ -3,21 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- سياسة أمنية مشددة جداً -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' https://kalmeron.app.n8n.cloud; img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
-<meta name="referrer" content="no-referrer">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>سر المنام - النسخة النهائية الآمنة</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:;">
+<title>سر المنام</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/fontsource-cairo@latest/index.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
-/* التصميم الرائع مع تحسينات أمنية */
 *{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.3) transparent}
 *::-webkit-scrollbar{width:6px;height:6px}
 *::-webkit-scrollbar-track{background:transparent}
@@ -129,17 +120,17 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @media(max-width:480px){.header{padding:12px 15px}.chat-wrapper{padding:15px 15px}.input-wrapper{padding:15px 15px 20px}.user-message,.bot-message{max-width:90%;padding:16px 22px;font-size:16px}.hint{padding:8px 14px;font-size:13px}.dream-input{font-size:16px;padding:17px 20px;padding-left:60px}.send-btn{left:12px;width:42px;height:42px;min-width:42px}.send-btn i{font-size:18px}.modal-btn-group{flex-direction:column}.dob-container{flex-direction:column;gap:10px}}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" onkeydown="return !(event.ctrlKey && event.shiftKey && event.key === 'I') && !(event.ctrlKey && event.key === 'U') && !(event.key === 'F12')">
 <div class="main-container">
 <aside class="sidebar" id="sidebar">
 <div class="sidebar-header">
 <h2><i class="fas fa-comments"></i> المحادثات</h2>
-<button class="close-sidebar" id="closeSidebarBtn"><i class="fas fa-times"></i></button>
+<button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
 </div>
 <div class="sidebar-actions">
-<button class="sidebar-btn btn-profile" id="profileBtn"><i class="fas fa-user-circle"></i> الملف الشخصي</button>
-<button class="sidebar-btn btn-new" id="newChatBtn"><i class="fas fa-plus"></i> محادثة جديدة</button>
-<button class="sidebar-btn btn-delete-all" id="deleteAllBtn"><i class="fas fa-trash"></i> حذف الكل</button>
+<button class="sidebar-btn btn-profile" onclick="openProfile()"><i class="fas fa-user-circle"></i> الملف الشخصي</button>
+<button class="sidebar-btn btn-new" onclick="newChat()"><i class="fas fa-plus"></i> محادثة جديدة</button>
+<button class="sidebar-btn btn-delete-all" onclick="deleteAllChats()"><i class="fas fa-trash"></i> حذف الكل</button>
 </div>
 <div class="chat-list" id="chatList">
 <div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات بعد</p></div>
@@ -147,7 +138,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </aside>
 <main class="main-content">
 <header class="header">
-<button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+<button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
 <div class="logo"><h1><i class="fas fa-moon"></i> مفسر الأحلام</h1></div>
 <div style="width:50px;"></div>
 </header>
@@ -158,7 +149,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 <div class="input-wrapper">
 <div class="input-content">
-<div class="hints" id="hintsContainer"></div>
+<div class="hints">
+<span class="hint" onclick="useHint('رأيت ثعباناً كبيراً')">🐍 ثعبان</span>
+<span class="hint" onclick="useHint('كنت أطير في السماء')">🕊️ طيران</span>
+<span class="hint" onclick="useHint('وجدت ذهباً')">💰 ذهب</span>
+<span class="hint" onclick="useHint('كنت أسبح في البحر')">🌊 بحر</span>
+<span class="hint" onclick="useHint('رأيت أسداً')">🦁 أسد</span>
+</div>
 <div class="input-row">
 <div class="dream-input-container">
 <textarea id="dreamInput" class="dream-input" placeholder="اكتب حلمك هنا بالتفصيل..." rows="1"></textarea>
@@ -178,786 +175,82 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 <p><i class="fas fa-calendar"></i> <strong>تاريخ الميلاد:</strong> <span id="displayBirth"></span></p>
 </div>
 <div class="modal-btn-group">
-<button id="editProfileBtn" class="modal-btn">تعديل البيانات <i class="fas fa-edit"></i></button>
-<button id="logoutBtn" class="modal-btn red">تسجيل خروج <i class="fas fa-sign-out-alt"></i></button>
+<button onclick="switchToEditMode()" class="modal-btn">تعديل البيانات <i class="fas fa-edit"></i></button>
+<button onclick="performLogout()" class="modal-btn red">تسجيل خروج <i class="fas fa-sign-out-alt"></i></button>
 </div>
-<button id="closeProfileBtn" class="modal-btn back" style="margin-top:20px;"><i class="fas fa-arrow-left"></i> رجوع إلى المحادثات</button>
+<button onclick="closeProfileModal()" class="modal-btn back" style="margin-top:20px;"><i class="fas fa-arrow-left"></i> رجوع إلى المحادثات</button>
 </div>
 <div id="profileEdit" style="display:none;">
 <h2 id="modalTitleEdit">تعديل البيانات</h2>
 <label class="modal-label">اسمك الكامل</label>
-<input type="text" id="userName" class="modal-input" placeholder="اكتب اسمك هنا..." maxlength="50">
+<input type="text" id="userName" class="modal-input" placeholder="اكتب اسمك هنا...">
 <label class="modal-label">تاريخ الميلاد</label>
 <div class="dob-container">
 <select id="birthDay" class="modal-input"><option value="">اليوم</option></select>
 <select id="birthMonth" class="modal-input"><option value="">الشهر</option></select>
 <select id="birthYear" class="modal-input"><option value="">السنة</option></select>
 </div>
-<button id="saveProfileBtn" class="modal-btn">حفظ التغييرات</button>
-<button id="cancelEditBtn" class="modal-btn" style="background:transparent;border:2px solid #ffd700;color:#ffd700;margin-top:10px;">إلغاء</button>
+<button onclick="saveProfile()" class="modal-btn">حفظ التغييرات</button>
+<button onclick="closeProfileModal()" class="modal-btn" style="background:transparent;border:2px solid #ffd700;color:#ffd700;margin-top:10px;">إلغاء</button>
 </div>
 </div>
 </div>
 <script>
-// ============================================
-// النسخة النهائية الخارقة - 35 طبقة حماية
-// ============================================
-
-(function(){
-    // ********** طبقات الحماية الأساسية **********
-    
-    // طبقة 1: منع الـ Debugging
-    setInterval(function(){
-        const _0x1a2b = new Date();
-        debugger;
-        const _0x2c3d = new Date() - _0x1a2b;
-        if(_0x2c3d > 100){
-            while(true){
-                window.location.href = 'about:blank';
-            }
-        }
-    }, 800);
-    
-    // طبقة 2: تعطيل الـ Console بالكامل
-    const _0x3d4e = ['log','debug','info','warn','error','table','trace','dir','dirxml','group','groupCollapsed','groupEnd','profile','profileEnd','time','timeEnd','timeStamp','timeline','timelineEnd'];
-    _0x3d4e.forEach(function(_0x4e5f){
-        if(window.console && window.console[_0x4e5f]){
-            window.console[_0x4e5f] = function(){};
-        }
-    });
-    
-    // طبقة 3: كشف وتدمير Proxy
-    if(window.Proxy){
-        window.console = new Proxy({}, {
-            get: function(){ return function(){}; }
-        });
-    }
-    
-    // طبقة 4: منع الكليك الأيمن
-    document.addEventListener('contextmenu', function(_0x5f6g){
-        _0x5f6g.preventDefault();
-        return false;
-    });
-    
-    // طبقة 5: منع اختصارات لوحة المفاتيح
-    document.addEventListener('keydown', function(_0x6g7h){
-        if(_0x6g7h.key === 'F12' || 
-           (_0x6g7h.ctrlKey && _0x6g7h.shiftKey && _0x6g7h.key === 'I') ||
-           (_0x6g7h.ctrlKey && _0x6g7h.key === 'U') ||
-           (_0x6g7h.ctrlKey && _0x6g7h.shiftKey && _0x6g7h.key === 'J') ||
-           (_0x6g7h.ctrlKey && _0x6g7h.key === 'S') ||
-           (_0x6g7h.ctrlKey && _0x6g7h.key === 'P') ||
-           (_0x6g7h.ctrlKey && _0x6g7h.key === 'C') ||
-           (_0x6g7h.ctrlKey && _0x6g7h.key === 'V')){
-            _0x6g7h.preventDefault();
-            return false;
-        }
-    });
-    
-    // طبقة 6: منع النسخ واللصق
-    document.addEventListener('copy', _0x7h8i => _0x7h8i.preventDefault());
-    document.addEventListener('cut', _0x8i9j => _0x8i9j.preventDefault());
-    document.addEventListener('paste', _0x9j0k => _0x9j0k.preventDefault());
-    
-    // طبقة 7: منع السحب والإفلات
-    document.addEventListener('dragstart', _0x0k1l => _0x0k1l.preventDefault());
-    
-    // طبقة 8: مسح الكوكيز والبيانات المشبوهة
-    document.cookie.split(';').forEach(function(_0x1l2m){
-        document.cookie = _0x1l2m.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
-    });
-    
-    // طبقة 9: كشف أدوات المطورين المتقدمة
-    let _0x2m3n = false;
-    const _0x3n4o = function(){
-        const _0x4o5p = new Date();
-        const _0x5p6q = /./;
-        _0x5p6q.toString = function(){
-            const _0x6q7r = Date.now() - _0x4o5p;
-            if(_0x6q7r > 100 && !_0x2m3n){
-                _0x2m3n = true;
-                document.body.innerHTML = '<div style="text-align:center;padding:50px;color:#ffd700;font-size:24px;">⚠️ تم اكتشاف أدوات المطورين</div>';
-            }
-            return 'x';
-        };
-        console.log(_0x5p6q);
-    };
-    setInterval(_0x3n4o, 1000);
-    
-    // طبقة 10: منع الـ iframe
-    if(window.self !== window.top){
-        window.top.location.href = window.self.location.href;
-    }
-    
-    // ********** تشفير البيانات (متعدد المستويات) **********
-    
-    // طبقة 11: مفاتيح التشفير (مخفية)
-    const _0x7r8s = [
-        '\x53\x65\x63\x72\x65\x74\x4b\x65\x79\x32\x30\x32\x34\x58\x59\x5a',  // SecretKey2024XYZ
-        '\x45\x6e\x63\x72\x79\x70\x74\x69\x6f\x6e\x4b\x65\x79\x32\x30\x32\x34', // EncryptionKey2024
-        '\x4d\x61\x73\x74\x65\x72\x53\x65\x63\x72\x65\x74\x32\x30\x32\x34',     // MasterSecret2024
-        '\x41\x50\x49\x5f\x4b\x45\x59\x5f\x53\x45\x43\x52\x45\x54\x5f\x32\x30\x32\x34' // API_KEY_SECRET_2024
-    ];
-    
-    // طبقة 12: دالة التشفير (3 مستويات)
-    function _0x8t9u(_0x9u0v){
-        try {
-            const _0x0v1w = CryptoJS.AES.encrypt(JSON.stringify(_0x9u0v), _0x7r8s[1]).toString();
-            const _0x1w2x = CryptoJS.AES.encrypt(_0x0v1w, _0x7r8s[0]).toString();
-            return CryptoJS.AES.encrypt(_0x1w2x, _0x7r8s[2]).toString();
-        } catch(_0x2x3y){
-            try {
-                return btoa(encodeURIComponent(JSON.stringify(_0x9u0v)));
-            } catch(_0x3y4z){
-                return null;
-            }
-        }
-    }
-    
-    // طبقة 13: دالة فك التشفير (3 مستويات)
-    function _0x4z5a(_0x5a6b){
-        if(!_0x5a6b) return null;
-        try {
-            const _0x6b7c = CryptoJS.AES.decrypt(_0x5a6b, _0x7r8s[2]);
-            const _0x7c8d = _0x6b7c.toString(CryptoJS.enc.Utf8);
-            if(!_0x7c8d) throw new Error('فشل المستوى 1');
-            
-            const _0x8d9e = CryptoJS.AES.decrypt(_0x7c8d, _0x7r8s[0]);
-            const _0x9e0f = _0x8d9e.toString(CryptoJS.enc.Utf8);
-            if(!_0x9e0f) throw new Error('فشل المستوى 2');
-            
-            const _0x0f1g = CryptoJS.AES.decrypt(_0x9e0f, _0x7r8s[1]);
-            return JSON.parse(_0x0f1g.toString(CryptoJS.enc.Utf8));
-        } catch(_0x1g2h){
-            try {
-                return JSON.parse(decodeURIComponent(atob(_0x5a6b)));
-            } catch(_0x2h3i){
-                return null;
-            }
-        }
-    }
-    
-    // طبقة 14: تخزين آمن مع تحقق التكامل (SHA256)
-    function _0x3i4j(_0x4j5k, _0x5k6l){
-        try {
-            const _0x6l7m = _0x8t9u(_0x5k6l);
-            const _0x7m8n = CryptoJS.SHA256(JSON.stringify(_0x5k6l)).toString();
-            localStorage.setItem(_0x4j5k + '_hash', _0x7m8n);
-            localStorage.setItem(_0x4j5k, _0x6l7m);
-            localStorage.setItem(_0x4j5k + '_time', Date.now().toString());
-            return true;
-        } catch(_0x8n9o){
-            return false;
-        }
-    }
-    
-    // طبقة 15: استرجاع آمن مع التحقق
-    function _0x9o0p(_0x0p1q){
-        try {
-            const _0x1q2r = localStorage.getItem(_0x0p1q);
-            const _0x2r3s = localStorage.getItem(_0x0p1q + '_hash');
-            if(!_0x1q2r) return null;
-            
-            const _0x3s4t = _0x4z5a(_0x1q2r);
-            if(_0x2r3s){
-                const _0x4t5u = CryptoJS.SHA256(JSON.stringify(_0x3s4t)).toString();
-                if(_0x4t5u !== _0x2r3s){
-                    localStorage.removeItem(_0x0p1q);
-                    localStorage.removeItem(_0x0p1q + '_hash');
-                    localStorage.removeItem(_0x0p1q + '_time');
-                    return null;
-                }
-            }
-            return _0x3s4t;
-        } catch(_0x5u6v){
-            return null;
-        }
-    }
-    
-    // طبقة 16: منع XSS والتصيد
-    function _0x6v7w(_0x7w8x){
-        return String(_0x7w8x)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#x27;')
-            .replace(/\//g, '&#x2F;')
-            .replace(/\\/g, '&#x5C;')
-            .replace(/`/g, '&#x60;')
-            .replace(/\[/g, '&#x5B;')
-            .replace(/\]/g, '&#x5D;');
-    }
-    
-    // طبقة 17: إخفاء Webhook (بتشفير مزدوج)
-    const _0x8x9y = (function(){
-        const _0x9y0z = [
-            'aHR0cHM6Ly9rYWxtZXJvbi5hcHAubjhuLmNsb3VkL3dlYmhvb2svZHJlZW0=',  // Base64
-            '68747470733a2f2f6b616c6d65726f6e2e6170702e6e386e2e636c6f75642f776562686f6f6b2f647265656d' // Hex
-        ];
-        return atob(_0x9y0z[0]);
-    })();
-    
-    // طبقة 18: إخفاء أسماء المفاتيح
-    const _0x0z1a = {
-        _0x1a2b: 'dreamChats',
-        _0x2b3c: 'dreamFavorites', 
-        _0x3c4d: 'userProfile'
-    };
-    
-    // طبقة 19: كشف محاولات الـ Hook
-    const _0x4d5e = {};
-    Object.defineProperty(window, '_0x5e6f', {
-        get: function(){ return _0x4d5e; },
-        set: function(){ throw new Error('محاولة اختراق'); }
-    });
-    
-    // ********** تهيئة العناصر **********
-    const _0x6f7g = document.getElementById('dreamInput');
-    const _0x7g8h = document.getElementById('chatContainer');
-    const _0x8h9i = document.getElementById('sendBtn');
-    const _0x9i0j = document.getElementById('sidebar');
-    const _0x0j1k = document.getElementById('chatList');
-    
-    let _0x1k2l = false;
-    let _0x2l3m = null;
-    let _0x3m4n = _0x9o0p(_0x0z1a._0x1a2b) || [];
-    let _0x4n5o = _0x9o0p(_0x0z1a._0x2b3c) || [];
-    let _0x5o6p = _0x9o0p(_0x0z1a._0x3c4d) || null;
-    
-    // طبقة 20: التحقق من البيئة
-    if(!window.navigator || !window.navigator.userAgent){
-        document.body.innerHTML = '<h1>بيئة غير آمنة</h1>';
-        throw new Error('بيئة غير آمنة');
-    }
-    
-    // طبقة 21: منع تسجيل الدوال
-    const _0x6p7q = function(_0x7q8r){
-        try {
-            _0x7q8r();
-        } catch(_0x8r9s){
-            return false;
-        }
-    };
-    
-    // دوال التطبيق الأساسية
-    function _0x9s0t(){
-        _0x6f7g.style.height = 'auto';
-        const _0x0t1u = Math.min(_0x6f7g.scrollHeight, 350);
-        _0x6f7g.style.height = _0x0t1u + 'px';
-        _0x6f7g.style.overflowY = _0x6f7g.scrollHeight > 350 ? 'auto' : 'hidden';
-    }
-    
-    function _0x1u2v(){
-        _0x9i0j.classList.toggle('open');
-        if(_0x9i0j.classList.contains('open')) _0x2v3w();
-    }
-    
-    function _0x2v3w(){
-        if(_0x3m4n.length === 0){
-            _0x0j1k.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';
-            return;
-        }
-        _0x0j1k.innerHTML = _0x3m4n.map(_0x3w4x => {
-            const _0x4x5y = _0x3w4x.id === _0x2l3m ? 'active' : '';
-            const _0x5y6z = _0x4n5o.includes(_0x3w4x.id) ? 'active' : '';
-            const _0x6z7a = _0x3w4x.messages[0]?.text || 'لا توجد رسائل';
-            const _0x7a8b = new Date(_0x3w4x.date).toLocaleDateString('ar-EG');
-            return `<div class="chat-item ${_0x4x5y}" data-id="${_0x3w4x.id}">
-                <div class="chat-item-content">
-                    <div class="chat-item-header">
-                        <div class="chat-item-title">${_0x6v7w(_0x3w4x.title || 'محادثة جديدة')}</div>
-                        <i class="fas fa-star chat-item-favorite ${_0x5y6z}" data-id="${_0x3w4x.id}"></i>
-                    </div>
-                    <div class="chat-item-preview">${_0x6v7w(_0x6z7a.substring(0, 50))}</div>
-                    <div class="chat-item-footer">
-                        <div class="chat-item-date">${_0x7a8b}</div>
-                        <button class="chat-item-delete" data-id="${_0x3w4x.id}"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-        
-        document.querySelectorAll('.chat-item').forEach(_0x8b9c => {
-            _0x8b9c.addEventListener('click', function(_0x9c0d){
-                _0x0d1e(this.dataset.id);
-            });
-        });
-        
-        document.querySelectorAll('.chat-item-favorite').forEach(_0x1e2f => {
-            _0x1e2f.addEventListener('click', function(_0x2f3g){
-                _0x2f3g.stopPropagation();
-                _0x3g4h(this.dataset.id);
-            });
-        });
-        
-        document.querySelectorAll('.chat-item-delete').forEach(_0x4h5i => {
-            _0x4h5i.addEventListener('click', function(_0x5i6j){
-                _0x5i6j.stopPropagation();
-                _0x6j7k(this.dataset.id);
-            });
-        });
-    }
-    
-    function _0x7k8l(){
-        const _0x8l9m = _0x5o6p && _0x5o6p.name ? ` ${_0x5o6p.name}` : '';
-        return `👋 مرحباً${_0x8l9m}! اكتب حلمك وسأقوم بتفسيره لك`;
-    }
-    
-    function _0x9m0n(){
-        const _0x0n1o = _0x7g8h.querySelector('.bot-message');
-        if(_0x0n1o) _0x0n1o.textContent = _0x7k8l();
-    }
-    
-    function _0x1o2p(){
-        const _0x2p3q = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10) + '-' + Math.random().toString(36).substring(2, 10);
-        _0x3m4n.unshift({
-            id: _0x2p3q,
-            title: 'محادثة جديدة',
-            messages: [],
-            date: new Date().toISOString()
-        });
-        _0x2l3m = _0x2p3q;
-        _0x3q4r();
-        _0x7g8h.innerHTML = `<div class="message-group"><div class="bot-message">${_0x7k8l()}</div></div>`;
-        _0x2v3w();
-        if(window.innerWidth <= 768) _0x1u2v();
-    }
-    
-    function _0x0d1e(_0x4r5s){
-        _0x2l3m = _0x4r5s;
-        const _0x5s6t = _0x3m4n.find(_0x6t7u => _0x6t7u.id === _0x4r5s);
-        if(!_0x5s6t) return;
-        if(_0x5s6t.messages.length === 0){
-            _0x7g8h.innerHTML = `<div class="message-group"><div class="bot-message">${_0x7k8l()}</div></div>`;
-        } else {
-            _0x7g8h.innerHTML = _0x5s6t.messages.map(_0x7u8v => 
-                `<div class="message-group"><div class="${_0x7u8v.type === 'user' ? 'user-message' : 'bot-message'}">${_0x6v7w(_0x7u8v.text)}</div></div>`
-            ).join('');
-        }
-        _0x8v9w(false);
-        _0x2v3w();
-        if(window.innerWidth <= 768) _0x1u2v();
-    }
-    
-    function _0x3g4h(_0x9w0x){
-        const _0x0x1y = _0x4n5o.indexOf(_0x9w0x);
-        if(_0x0x1y > -1) _0x4n5o.splice(_0x0x1y, 1);
-        else _0x4n5o.push(_0x9w0x);
-        _0x3q4r();
-        _0x2v3w();
-    }
-    
-    function _0x6j7k(_0x1y2z){
-        if(!confirm('هل أنت متأكد من حذف هذه المحادثة؟')) return;
-        _0x3m4n = _0x3m4n.filter(_0x2z3a => _0x2z3a.id !== _0x1y2z);
-        _0x4n5o = _0x4n5o.filter(_0x3a4b => _0x3a4b !== _0x1y2z);
-        if(_0x2l3m === _0x1y2z){
-            _0x2l3m = null;
-            _0x7g8h.innerHTML = `<div class="message-group"><div class="bot-message">${_0x7k8l()}</div></div>`;
-        }
-        _0x3q4r();
-        _0x2v3w();
-    }
-    
-    function _0x4b5c(){
-        if(!confirm('هل أنت متأكد من حذف جميع المحادثات؟')) return;
-        _0x3m4n = [];
-        _0x4n5o = [];
-        _0x2l3m = null;
-        _0x3q4r();
-        _0x7g8h.innerHTML = `<div class="message-group"><div class="bot-message">${_0x7k8l()}</div></div>`;
-        _0x2v3w();
-    }
-    
-    function _0x8v9w(_0x5c6d = true){
-        setTimeout(() => {
-            _0x7g8h.scrollTo({
-                top: _0x7g8h.scrollHeight,
-                behavior: _0x5c6d ? 'smooth' : 'auto'
-            });
-        }, 10);
-    }
-    
-    function _0x6d7e(_0x7e8f){
-        if(_0x1k2l) return;
-        _0x6f7g.value = _0x7e8f;
-        _0x9s0t();
-        _0x6f7g.focus();
-    }
-    
-    function _0x8f9g(_0x9g0h){
-        _0x1k2l = _0x9g0h;
-        _0x8h9i.disabled = _0x9g0h;
-        document.querySelectorAll('.hint').forEach(_0x0h1i => _0x0h1i.classList.toggle('disabled-hint', _0x9g0h));
-        _0x8h9i.innerHTML = _0x9g0h ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
-    }
-    
-    function _0x1i2j(_0x2j3k){
-        const _0x3k4l = document.createElement('div');
-        _0x3k4l.className = 'message-group';
-        const _0x4l5m = document.createElement('div');
-        _0x4l5m.className = 'user-message';
-        _0x4l5m.textContent = _0x2j3k;
-        const _0x5m6n = document.createElement('div');
-        _0x5m6n.className = 'bot-message';
-        _0x3k4l.append(_0x4l5m, _0x5m6n);
-        _0x7g8h.appendChild(_0x3k4l);
-        return _0x5m6n;
-    }
-    
-    async function _0x6n7o(_0x7o8p, _0x8p9q, _0x9q0r = 15){
-        _0x7o8p.innerHTML = '';
-        for(let _0x0r1s = 0; _0x0r1s < _0x8p9q.length; _0x0r1s++){
-            _0x7o8p.innerHTML += _0x8p9q[_0x0r1s];
-            if(_0x0r1s % 3 === 0) _0x8v9w(true);
-            await new Promise(_0x1s2t => setTimeout(_0x1s2t, _0x9q0r));
-        }
-        _0x8v9w(true);
-    }
-    
-    async function _0x2t3u(_0x3u4v){
-        const _0x4v5w = document.createElement('div');
-        _0x4v5w.className = 'message-group';
-        _0x4v5w.id = 'typingIndicator';
-        _0x4v5w.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
-        _0x7g8h.appendChild(_0x4v5w);
-        _0x8v9w(true);
-        
-        try {
-            // طبقة 22: إضافة Secret Key في الـ Header
-            const _0x5w6x = await fetch(_0x8x9y, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-Key': _0x7r8s[3],  // المفتاح السري
-                    'X-Request-ID': Date.now().toString(36) + Math.random().toString(36).substring(2),
-                    'X-Client-ID': btoa(navigator.userAgent.substring(0, 50)),
-                    'X-Timestamp': Date.now().toString(),
-                    'X-Signature': CryptoJS.SHA256(_0x3u4v + _0x7r8s[3]).toString()
-                },
-                body: JSON.stringify({
-                    dream: _0x3u4v.substring(0, 500),
-                    userName: _0x5o6p?.name || 'زائر',
-                    birthDate: _0x5o6p?.birthDate || 'غير محدد',
-                    timestamp: Date.now(),
-                    fingerprint: CryptoJS.SHA256(navigator.userAgent + navigator.language + navigator.platform).toString()
-                })
-            });
-            
-            document.getElementById('typingIndicator')?.remove();
-            
-            const _0x6x7y = await _0x5w6x.text();
-            
-            if(!_0x5w6x.ok){
-                throw new Error(`خطأ في الاتصال: ${_0x5w6x.status}`);
-            }
-            
-            // طبقة 23: التحقق من الرد
-            let _0x7y8z = _0x6x7y;
-            if(_0x6x7y && (_0x6x7y.startsWith('{') || _0x6x7y.startsWith('['))){
-                try {
-                    const _0x8z9a = JSON.parse(_0x6x7y);
-                    _0x7y8z = _0x8z9a.interpretation || _0x8z9a.message || _0x8z9a.text || _0x8z9a.reply || _0x8z9a.response || JSON.stringify(_0x8z9a);
-                } catch(_0x9a0b){}
-            }
-            
-            const _0x0b1c = _0x1i2j(_0x3u4v);
-            await _0x6n7o(_0x0b1c, _0x7y8z, 15);
-            
-            if(!_0x2l3m){
-                _0x2l3m = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
-                _0x3m4n.unshift({
-                    id: _0x2l3m,
-                    title: _0x3u4v.substring(0, 30) + '...',
-                    messages: [],
-                    date: new Date().toISOString()
-                });
-            }
-            
-            const _0x1c2d = _0x3m4n.find(_0x2d3e => _0x2d3e.id === _0x2l3m);
-            if(_0x1c2d){
-                _0x1c2d.messages.push({type: 'user', text: _0x3u4v});
-                _0x1c2d.messages.push({type: 'bot', text: _0x7y8z});
-                if(!_0x1c2d.title || _0x1c2d.title === 'محادثة جديدة'){
-                    _0x1c2d.title = _0x3u4v.substring(0, 30) + '...';
-                }
-                _0x3q4r();
-            }
-        } catch(_0x3e4f){
-            document.getElementById('typingIndicator')?.remove();
-            const _0x4f5g = '❌ عذراً، حدث خطأ في الاتصال. الرجاء المحاولة مرة أخرى.';
-            const _0x5g6h = _0x1i2j(_0x3u4v);
-            await _0x6n7o(_0x5g6h, _0x4f5g, 15);
-        }
-    }
-    
-    async function _0x6h7i(){
-        if(_0x1k2l) return;
-        const _0x7i8j = _0x6f7g.value.trim();
-        if(!_0x7i8j) return;
-        _0x8f9g(true);
-        _0x6f7g.value = '';
-        _0x9s0t();
-        await _0x2t3u(_0x7i8j);
-        _0x8f9g(false);
-        _0x6f7g.focus();
-        _0x2v3w();
-    }
-    
-    function _0x8j9k(){
-        const _0x9k0l = document.getElementById('birthDay');
-        const _0x0l1m = document.getElementById('birthMonth');
-        const _0x1m2n = document.getElementById('birthYear');
-        
-        _0x9k0l.innerHTML = '<option value="">اليوم</option>';
-        for(let _0x2n3o = 1; _0x2n3o <= 31; _0x2n3o++){
-            const _0x3o4p = document.createElement('option');
-            _0x3o4p.value = _0x2n3o;
-            _0x3o4p.textContent = _0x2n3o;
-            _0x9k0l.appendChild(_0x3o4p);
-        }
-        
-        const _0x4p5q = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-        _0x0l1m.innerHTML = '<option value="">الشهر</option>';
-        for(let _0x5q6r = 0; _0x5q6r < 12; _0x5q6r++){
-            const _0x6r7s = document.createElement('option');
-            _0x6r7s.value = _0x5q6r + 1;
-            _0x6r7s.textContent = _0x4p5q[_0x5q6r];
-            _0x0l1m.appendChild(_0x6r7s);
-        }
-        
-        const _0x7s8t = new Date().getFullYear();
-        _0x1m2n.innerHTML = '<option value="">السنة</option>';
-        for(let _0x8t9u = _0x7s8t; _0x8t9u >= 1940; _0x8t9u--){
-            const _0x9u0v = document.createElement('option');
-            _0x9u0v.value = _0x8t9u;
-            _0x9u0v.textContent = _0x8t9u;
-            _0x1m2n.appendChild(_0x9u0v);
-        }
-    }
-    
-    function _0x0v1w(){
-        const _0x1w2x = document.getElementById('profileModal');
-        if(!_0x5o6p){
-            document.getElementById('profileView').style.display = 'none';
-            document.getElementById('profileEdit').style.display = 'block';
-            document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
-            document.getElementById('userName').value = '';
-            document.getElementById('birthDay').value = '';
-            document.getElementById('birthMonth').value = '';
-            document.getElementById('birthYear').value = '';
-        } else {
-            document.getElementById('profileView').style.display = 'block';
-            document.getElementById('profileEdit').style.display = 'none';
-            document.getElementById('displayName').textContent = _0x5o6p.name;
-            document.getElementById('displayBirth').textContent = _0x5o6p.birthDate;
-        }
-        _0x1w2x.style.display = 'flex';
-    }
-    
-    function _0x2x3y(){
-        document.getElementById('profileView').style.display = 'none';
-        document.getElementById('profileEdit').style.display = 'block';
-        document.getElementById('modalTitleEdit').textContent = 'تعديل البيانات';
-        if(_0x5o6p){
-            document.getElementById('userName').value = _0x5o6p.name || '';
-            if(_0x5o6p.birthDate){
-                const [_0x3y4z, _0x4z5a, _0x5a6b] = _0x5o6p.birthDate.split('/');
-                document.getElementById('birthDay').value = _0x3y4z || '';
-                document.getElementById('birthMonth').value = _0x4z5a || '';
-                document.getElementById('birthYear').value = _0x5a6b || '';
-            }
-        }
-    }
-    
-    function _0x6b7c(){
-        const _0x7c8d = document.getElementById('userName').value.trim().substring(0, 50);
-        const _0x8d9e = document.getElementById('birthDay').value;
-        const _0x9e0f = document.getElementById('birthMonth').value;
-        const _0x0f1g = document.getElementById('birthYear').value;
-        
-        if(!_0x7c8d) return alert('يرجى إدخال اسمك الكامل');
-        if(!_0x8d9e || !_0x9e0f || !_0x0f1g) return alert('يرجى اختيار تاريخ الميلاد كاملاً');
-        
-        _0x5o6p = {
-            name: _0x7c8d,
-            birthDate: `${_0x8d9e}/${_0x9e0f}/${_0x0f1g}`
-        };
-        
-        _0x3i4j(_0x0z1a._0x3c4d, _0x5o6p);
-        _0x3q4r();
-        document.getElementById('profileModal').style.display = 'none';
-        _0x9m0n();
-    }
-    
-    function _0x1g2h(){
-        if(!confirm('هل أنت متأكد من تسجيل الخروج؟')) return;
-        localStorage.removeItem(_0x0z1a._0x3c4d);
-        localStorage.removeItem(_0x0z1a._0x3c4d + '_hash');
-        localStorage.removeItem(_0x0z1a._0x3c4d + '_time');
-        _0x5o6p = null;
-        _0x3m4n = [];
-        _0x4n5o = [];
-        _0x2l3m = null;
-        document.getElementById('profileModal').style.display = 'none';
-        _0x9m0n();
-        _0x7g8h.innerHTML = `<div class="message-group"><div class="bot-message">${_0x7k8l()}</div></div>`;
-        setTimeout(() => {
-            const _0x2h3i = document.getElementById('profileModal');
-            document.getElementById('profileView').style.display = 'none';
-            document.getElementById('profileEdit').style.display = 'block';
-            document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
-            document.getElementById('userName').value = '';
-            document.getElementById('birthDay').value = '';
-            document.getElementById('birthMonth').value = '';
-            document.getElementById('birthYear').value = '';
-            _0x2h3i.style.display = 'flex';
-        }, 400);
-    }
-    
-    function _0x3i4j(){
-        document.getElementById('profileModal').style.display = 'none';
-    }
-    
-    function _0x3q4r(){
-        _0x3i4j(_0x0z1a._0x1a2b, _0x3m4n);
-        _0x3i4j(_0x0z1a._0x2b3c, _0x4n5o);
-    }
-    
-    // ربط الأحداث
-    document.getElementById('menuBtn').addEventListener('click', _0x1u2v);
-    document.getElementById('closeSidebarBtn').addEventListener('click', _0x1u2v);
-    document.getElementById('profileBtn').addEventListener('click', _0x0v1w);
-    document.getElementById('newChatBtn').addEventListener('click', _0x1o2p);
-    document.getElementById('deleteAllBtn').addEventListener('click', _0x4b5c);
-    document.getElementById('editProfileBtn')?.addEventListener('click', _0x2x3y);
-    document.getElementById('logoutBtn')?.addEventListener('click', _0x1g2h);
-    document.getElementById('closeProfileBtn')?.addEventListener('click', _0x3i4j);
-    document.getElementById('saveProfileBtn')?.addEventListener('click', _0x6b7c);
-    document.getElementById('cancelEditBtn')?.addEventListener('click', _0x3i4j);
-    
-    _0x8h9i.addEventListener('click', _0x6h7i);
-    _0x6f7g.addEventListener('input', _0x9s0t);
-    _0x6f7g.addEventListener('keydown', _0x4j5k => {
-        if(_0x4j5k.key === 'Enter' && !_0x4j5k.shiftKey){
-            _0x4j5k.preventDefault();
-            _0x6h7i();
-        }
-    });
-    
-    // تهيئة الهينتات
-    const _0x5k6l = [
-        {text: '🐍 ثعبان', value: 'رأيت ثعباناً كبيراً'},
-        {text: '🕊️ طيران', value: 'كنت أطير في السماء'},
-        {text: '💰 ذهب', value: 'وجدت ذهباً'},
-        {text: '🌊 بحر', value: 'كنت أسبح في البحر'},
-        {text: '🦁 أسد', value: 'رأيت أسداً'}
-    ];
-    
-    const _0x6l7m = document.getElementById('hintsContainer');
-    _0x6l7m.innerHTML = _0x5k6l.map(_0x7m8n => 
-        `<span class="hint" data-value="${_0x7m8n.value}">${_0x7m8n.text}</span>`
-    ).join('');
-    
-    document.querySelectorAll('.hint').forEach(_0x8n9o => {
-        _0x8n9o.addEventListener('click', function(){
-            if(_0x1k2l) return;
-            _0x6f7g.value = this.dataset.value;
-            _0x9s0t();
-            _0x6f7g.focus();
-        });
-    });
-    
-    // طبقة 24: منع الـ WebSocket Debugging
-    if(window.WebSocket){
-        const _0x9o0p = window.WebSocket;
-        window.WebSocket = function(){};
-        window.WebSocket.prototype = _0x9o0p.prototype;
-    }
-    
-    // طبقة 25: منع Service Worker
-    if(navigator.serviceWorker){
-        navigator.serviceWorker.register = function(){};
-        navigator.serviceWorker.getRegistrations = function(){ return Promise.resolve([]); };
-    }
-    
-    // طبقة 26: تعطيل Performance API
-    if(window.performance && window.performance.mark){
-        window.performance.mark = function(){};
-        window.performance.measure = function(){};
-        window.performance.getEntries = function(){ return []; };
-    }
-    
-    // طبقة 27: منع Beacon API
-    if(navigator.sendBeacon){
-        navigator.sendBeacon = function(){ return false; };
-    }
-    
-    // طبقة 28: منع الـ Breakpoints التلقائية
-    window.onunload = function(){};
-    window.onbeforeunload = function(){};
-    
-    // طبقة 29: إخفاء الروابط
-    const _0x0p1q = document.querySelectorAll('a[href]');
-    _0x0p1q.forEach(_0x1q2r => _0x1q2r.removeAttribute('href'));
-    
-    // طبقة 30: منع الـ History API
-    if(window.history && window.history.pushState){
-        window.history.pushState = function(){};
-        window.history.replaceState = function(){};
-    }
-    
-    // طبقة 31: منع الـ MutationObserver
-    if(window.MutationObserver){
-        window.MutationObserver = function(){};
-    }
-    
-    // طبقة 32: منع الـ ResizeObserver
-    if(window.ResizeObserver){
-        window.ResizeObserver = function(){};
-    }
-    
-    // طبقة 33: منع الـ IntersectionObserver
-    if(window.IntersectionObserver){
-        window.IntersectionObserver = function(){};
-    }
-    
-    // طبقة 34: كشف محاولات التعديل على الكود
-    const _0x2r3s = document.body.innerHTML;
-    setInterval(function(){
-        if(document.body.innerHTML !== _0x2r3s){
-            document.body.innerHTML = _0x2r3s;
-        }
-    }, 1000);
-    
-    // طبقة 35: تشويش إضافي للمتغيرات
-    window._0x3s4t = _0x8f9g;
-    window._0x4t5u = _0x9s0t;
-    window._0x5u6v = _0x1u2v;
-    
-    // تهيئة التطبيق
-    _0x8j9k();
-    if(_0x3m4n.length === 0) _0x1o2p();
-    
-    window.addEventListener('load', () => {
-        _0x9s0t();
-        _0x8v9w(false);
-        _0x2v3w();
-        if(_0x5o6p){
-            _0x9m0n();
-        } else {
-            setTimeout(() => {
-                const _0x6v7w = document.getElementById('profileModal');
-                document.getElementById('profileView').style.display = 'none';
-                document.getElementById('profileEdit').style.display = 'block';
-                document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
-                _0x6v7w.style.display = 'flex';
-            }, 500);
-        }
-    });
-    
-})();
+// Security Configuration
+const _0x5a2b=['\x65\x6e\x63\x72\x79\x70\x74\x65\x64\x44\x61\x74\x61','\x53\x65\x63\x75\x72\x65\x4b\x65\x79\x32\x30\x32\x34\x53\x65\x63\x75\x72\x65','\x64\x72\x65\x61\x6d\x46\x61\x76\x6f\x72\x69\x74\x65\x73','\x75\x73\x65\x72\x50\x72\x6f\x66\x69\x6c\x65','\x64\x72\x65\x61\x6d\x43\x68\x61\x74\x73','\x45\x6e\x63\x72\x79\x70\x74\x69\x6f\x6e\x4b\x65\x79\x32\x30\x32\x34','\x70\x72\x6f\x66\x69\x6c\x65\x4d\x6f\x64\x61\x6c','\x63\x68\x61\x74\x43\x6f\x6e\x74\x61\x69\x6e\x65\x72','\x73\x65\x6e\x64\x42\x74\x6e','\x64\x72\x65\x61\x6d\x49\x6e\x70\x75\x74','\x63\x68\x61\x74\x4c\x69\x73\x74','\x73\x69\x64\x65\x62\x61\x72','\x62\x69\x72\x74\x68\x44\x61\x79','\x62\x69\x72\x74\x68\x4d\x6f\x6e\x74\x68','\x62\x69\x72\x74\x68\x59\x65\x61\x72','\x64\x69\x73\x70\x6c\x61\x79\x4e\x61\x6d\x65','\x64\x69\x73\x70\x6c\x61\x79\x42\x69\x72\x74\x68','\x75\x73\x65\x72\x4e\x61\x6d\x65','\x70\x72\x6f\x66\x69\x6c\x65\x56\x69\x65\x77','\x70\x72\x6f\x66\x69\x6c\x65\x45\x64\x69\x74','\x6d\x6f\x64\x61\x6c\x54\x69\x74\x6c\x65\x45\x64\x69\x74','\x6c\x6f\x61\x64\x43\x68\x61\x74','\x74\x6f\x67\x67\x6c\x65\x46\x61\x76\x6f\x72\x69\x74\x65','\x64\x65\x6c\x65\x74\x65\x43\x68\x61\x74','\x64\x65\x6c\x65\x74\x65\x41\x6c\x6c\x43\x68\x61\x74\x73','\x75\x73\x65\x48\x69\x6e\x74','\x68\x61\x6e\x64\x6c\x65\x53\x65\x6e\x64','\x73\x61\x76\x65\x50\x72\x6f\x66\x69\x6c\x65','\x70\x65\x72\x66\x6f\x72\x6d\x4c\x6f\x67\x6f\x75\x74','\x63\x6c\x6f\x73\x65\x50\x72\x6f\x66\x69\x6c\x65\x4d\x6f\x64\x61\x6c','\x6f\x70\x65\x6e\x50\x72\x6f\x66\x69\x6c\x65','\x73\x77\x69\x74\x63\x68\x54\x6f\x45\x64\x69\x74\x4d\x6f\x64\x65','\x6e\x65\x77\x43\x68\x61\x74','\x74\x6f\x67\x67\x6c\x65\x53\x69\x64\x65\x62\x61\x72'];
+const ENCRYPTION_KEY='EncryptionKey2024Secure';
+const SECURE_KEY='SecureKey2024Secure';
+function encryptData(data){try{return CryptoJS.AES.encrypt(JSON.stringify(data),ENCRYPTION_KEY).toString()}catch(e){return btoa(encodeURIComponent(JSON.stringify(data)))}}
+function decryptData(encrypted){try{const bytes=CryptoJS.AES.decrypt(encrypted,ENCRYPTION_KEY);return JSON.parse(bytes.toString(CryptoJS.enc.Utf8))}catch(e){try{return JSON.parse(decodeURIComponent(atob(encrypted)))}catch(e2){return null}}}
+function secureStorage(key,data){try{localStorage.setItem(key,encryptData(data));return true}catch(e){return false}}
+function secureRetrieve(key){try{const encrypted=localStorage.getItem(key);if(!encrypted)return null;return decryptData(encrypted)}catch(e){return null}}
+const dreamInput=document.getElementById('dreamInput');
+const chatContainer=document.getElementById('chatContainer');
+const sendBtn=document.getElementById('sendBtn');
+const hints=document.querySelectorAll('.hint');
+const sidebar=document.getElementById('sidebar');
+const chatList=document.getElementById('chatList');
+let isGenerating=false;
+let currentChatId=null;
+let chats=secureRetrieve('dreamChats')||[];
+let favorites=secureRetrieve('dreamFavorites')||[];
+let userProfile=secureRetrieve('userProfile')||null;
+const WEBHOOK_URL='https://kalmeron.app.n8n.cloud/webhook/dreem';
+function autoResizeTextarea(){dreamInput.style.height='auto';const newHeight=Math.min(dreamInput.scrollHeight,350);dreamInput.style.height=newHeight+'px';dreamInput.style.overflowY=dreamInput.scrollHeight>350?'auto':'hidden'}
+dreamInput.addEventListener('input',autoResizeTextarea);
+function saveData(){secureStorage('dreamChats',chats);secureStorage('dreamFavorites',favorites);if(userProfile)secureStorage('userProfile',userProfile)}
+function toggleSidebar(){sidebar.classList.toggle('open');if(sidebar.classList.contains('open'))renderChatList()}
+function renderChatList(){if(chats.length===0){chatList.innerHTML='<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';return}chatList.innerHTML=chats.map(chat=>`<div class="chat-item ${chat.id===currentChatId?'active':''}" onclick="loadChat('${chat.id}')"><div class="chat-item-content"><div class="chat-item-header"><div class="chat-item-title">${chat.title||'محادثة جديدة'}</div><i class="fas fa-star chat-item-favorite ${favorites.includes(chat.id)?'active':''}" onclick="event.stopPropagation(); toggleFavorite('${chat.id}')"></i></div><div class="chat-item-preview">${chat.messages[0]?.text||'لا توجد رسائل'}</div><div class="chat-item-footer"><div class="chat-item-date">${new Date(chat.date).toLocaleDateString('ar-EG')}</div><button class="chat-item-delete" onclick="event.stopPropagation(); deleteChat('${chat.id}')"><i class="fas fa-trash"></i></button></div></div></div>`).join('')}
+function getWelcomeMessage(){const namePart=userProfile&&userProfile.name?` ${userProfile.name}`:'';return`👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`}
+function updateWelcomeInCurrentChat(){const firstBot=chatContainer.querySelector('.bot-message');if(firstBot)firstBot.textContent=getWelcomeMessage()}
+function newChat(){const chatId='chat-'+Date.now();chats.unshift({id:chatId,title:'محادثة جديدة',messages:[],date:new Date().toISOString()});currentChatId=chatId;saveData();chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;renderChatList();if(window.innerWidth<=768)toggleSidebar()}
+function loadChat(chatId){currentChatId=chatId;const chat=chats.find(c=>c.id===chatId);if(!chat)return;if(chat.messages.length===0){chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`}else{chatContainer.innerHTML=chat.messages.map(msg=>`<div class="message-group"><div class="${msg.type==='user'?'user-message':'bot-message'}">${msg.text}</div></div>`).join('')}scrollToBottom(false);renderChatList();if(window.innerWidth<=768)toggleSidebar()}
+function toggleFavorite(chatId){const index=favorites.indexOf(chatId);if(index>-1)favorites.splice(index,1);else favorites.push(chatId);saveData();renderChatList()}
+function deleteChat(chatId){if(!confirm('هل أنت متأكد من حذف هذه المحادثة؟'))return;chats=chats.filter(c=>c.id!==chatId);favorites=favorites.filter(f=>f!==chatId);if(currentChatId===chatId){currentChatId=null;chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`}saveData();renderChatList()}
+function deleteAllChats(){if(!confirm('هل أنت متأكد من حذف جميع المحادثات؟'))return;chats=[];favorites=[];currentChatId=null;saveData();chatContainer.innerHTML=`<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;renderChatList()}
+function scrollToBottom(smooth=true){setTimeout(()=>{chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:smooth?'smooth':'auto'});},10)}
+function useHint(text){if(isGenerating)return;dreamInput.value=text;autoResizeTextarea();dreamInput.focus()}
+function updateUIState(generating){isGenerating=generating;sendBtn.disabled=generating;hints.forEach(h=>h.classList.toggle('disabled-hint',generating));sendBtn.innerHTML=generating?'<i class="fas fa-spinner fa-spin"></i>':'<i class="fas fa-arrow-up"></i>'}
+function addMessageGroup(userText){const group=document.createElement('div');group.className='message-group';const userDiv=document.createElement('div');userDiv.className='user-message';userDiv.textContent=userText;const botDiv=document.createElement('div');botDiv.className='bot-message';group.append(userDiv,botDiv);chatContainer.appendChild(group);return botDiv}
+function showTypingIndicator(){const ind=document.createElement('div');ind.className='message-group';ind.id='typingIndicator';ind.innerHTML='<div class="typing-indicator"><span></span><span></span><span></span></div>';chatContainer.appendChild(ind);scrollToBottom(true)}
+function hideTypingIndicator(){const ind=document.getElementById('typingIndicator');if(ind)ind.remove()}
+async function typeMessage(element,text,speed=15){element.innerHTML='';for(let i=0;i<text.length;i++){element.innerHTML+=text[i];if(i%3===0)scrollToBottom(true);await new Promise(r=>setTimeout(r,speed))}scrollToBottom(true)}
+async function processMessage(messageText){showTypingIndicator();try{const response=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dream:messageText,userName:userProfile?.name||'زائر',birthDate:userProfile?.birthDate||'غير محدد'})});const responseText=await response.text();hideTypingIndicator();if(!response.ok){throw new Error(`فشل الطلب: ${response.status} - ${responseText}`)}if(!responseText||responseText.trim()===''){const defaultMessage='تم استلام حلمك بنجاح ✅ سيقوم المفسر بالرد قريباً.';const botElement=addMessageGroup(messageText);await typeMessage(botElement,defaultMessage,15);if(!currentChatId){currentChatId='chat-'+Date.now();chats.unshift({id:currentChatId,title:messageText.substring(0,30)+'...',messages:[],date:new Date().toISOString()})}const chat=chats.find(c=>c.id===currentChatId);if(chat){chat.messages.push({type:'user',text:messageText});chat.messages.push({type:'bot',text:defaultMessage});if(!chat.title||chat.title==='محادثة جديدة')chat.title=messageText.substring(0,30)+'...';saveData()}return}let interpretation=responseText;if(responseText.trim().startsWith('{')||responseText.trim().startsWith('[')){try{const data=JSON.parse(responseText);interpretation=data.interpretation||data.message||data.text||data.reply||data.response||JSON.stringify(data)}catch(e){console.log('النص مش JSON صحيح')}}const botElement=addMessageGroup(messageText);await typeMessage(botElement,interpretation,15);if(!currentChatId){currentChatId='chat-'+Date.now();chats.unshift({id:currentChatId,title:messageText.substring(0,30)+'...',messages:[],date:new Date().toISOString()})}const chat=chats.find(c=>c.id===currentChatId);if(chat){chat.messages.push({type:'user',text:messageText});chat.messages.push({type:'bot',text:interpretation});if(!chat.title||chat.title==='محادثة جديدة')chat.title=messageText.substring(0,30)+'...';saveData()}}catch(error){hideTypingIndicator();console.error('خطأ:',error);let errorMessage='❌ عذراً، حدث خطأ في الاتصال.\n🔍 التفاصيل: '+error.message;const botElement=addMessageGroup(messageText);await typeMessage(botElement,errorMessage,15)}}
+async function handleSend(){if(isGenerating)return;const dreamText=dreamInput.value.trim();if(!dreamText)return alert('اكتب حلمك أولاً');updateUIState(true);dreamInput.value='';autoResizeTextarea();await processMessage(dreamText);updateUIState(false);dreamInput.focus();renderChatList()}
+function populateDOBSelects(){const daySel=document.getElementById('birthDay');const monthSel=document.getElementById('birthMonth');const yearSel=document.getElementById('birthYear');daySel.innerHTML='<option value="">اليوم</option>';for(let d=1;d<=31;d++){const opt=document.createElement('option');opt.value=d;opt.textContent=d;daySel.appendChild(opt)}const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];monthSel.innerHTML='<option value="">الشهر</option>';for(let m=0;m<12;m++){const opt=document.createElement('option');opt.value=m+1;opt.textContent=months[m];monthSel.appendChild(opt)}const currentYear=new Date().getFullYear();yearSel.innerHTML='<option value="">السنة</option>';for(let y=currentYear;y>=1940;y--){const opt=document.createElement('option');opt.value=y;opt.textContent=y;yearSel.appendChild(opt)}}
+function openProfile(){const modal=document.getElementById('profileModal');if(!userProfile){document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='مرحباً! سجل بياناتك للبدء';document.getElementById('userName').value='';document.getElementById('birthDay').value='';document.getElementById('birthMonth').value='';document.getElementById('birthYear').value=''}else{document.getElementById('profileView').style.display='block';document.getElementById('profileEdit').style.display='none';document.getElementById('displayName').textContent=userProfile.name;document.getElementById('displayBirth').textContent=userProfile.birthDate}modal.style.display='flex'}
+function switchToEditMode(){document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='تعديل البيانات';if(userProfile){document.getElementById('userName').value=userProfile.name||'';if(userProfile.birthDate){const[d,m,y]=userProfile.birthDate.split('/');document.getElementById('birthDay').value=d||'';document.getElementById('birthMonth').value=m||'';document.getElementById('birthYear').value=y||''}}}
+function saveProfile(){const name=document.getElementById('userName').value.trim();const day=document.getElementById('birthDay').value;const month=document.getElementById('birthMonth').value;const year=document.getElementById('birthYear').value;if(!name)return alert('يرجى إدخال اسمك الكامل');if(!day||!month||!year)return alert('يرجى اختيار تاريخ الميلاد كاملاً');userProfile={name,birthDate:`${day}/${month}/${year}`};secureStorage('userProfile',userProfile);saveData();document.getElementById('profileModal').style.display='none';updateWelcomeInCurrentChat();alert('✅ تم حفظ بياناتك بنجاح!')}
+function performLogout(){if(!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.'))return;localStorage.removeItem('userProfile');localStorage.removeItem('dreamChats');localStorage.removeItem('dreamFavorites');userProfile=null;chats=[];favorites=[];currentChatId=null;document.getElementById('profileModal').style.display='none';updateWelcomeInCurrentChat();setTimeout(()=>{const modal=document.getElementById('profileModal');document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='مرحباً! سجل بياناتك للبدء';document.getElementById('userName').value='';document.getElementById('birthDay').value='';document.getElementById('birthMonth').value='';document.getElementById('birthYear').value='';modal.style.display='flex'},400)}
+function closeProfileModal(){document.getElementById('profileModal').style.display='none'}
+sendBtn.addEventListener('click',handleSend);
+dreamInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend()}});
+populateDOBSelects();
+if(chats.length===0)newChat();
+window.addEventListener('load',()=>{autoResizeTextarea();scrollToBottom(false);renderChatList();if(userProfile){updateWelcomeInCurrentChat()}else{const modal=document.getElementById('profileModal');document.getElementById('profileView').style.display='none';document.getElementById('profileEdit').style.display='block';document.getElementById('modalTitleEdit').textContent='مرحباً! سجل بياناتك للبدء';modal.style.display='flex'}});
+document.addEventListener('contextmenu',event=>event.preventDefault());
+document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.shiftKey&&e.key==='I'){e.preventDefault();return false}if(e.ctrlKey&&e.key==='U'){e.preventDefault();return false}if(e.key==='F12'){e.preventDefault();return false}});
 </script>
 </body>
 </html>
+
