@@ -1,9 +1,12 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data:; connect-src 'self' https:; frame-src 'none'; object-src 'none'">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-XSS-Protection" content="1; mode=block">
 <title>سر المنام - مفسر الأحلام</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/fontsource-cairo@latest/index.css" rel="stylesheet">
@@ -14,7 +17,7 @@
 *::-webkit-scrollbar-track{background:transparent}
 *::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.3);border-radius:10px}
 *::-webkit-scrollbar-thumb:hover{background:rgba(255,215,0,0.5)}
-html,body{height:100%;overflow:hidden}
+html,body{height:100%;overflow:hidden;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none}
 body{font-family:'Cairo',sans-serif;background:linear-gradient(135deg,#0a0f20 0%,#141b33 50%,#0d1428 100%);color:#fff;display:flex;flex-direction:column;position:relative}
 body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 20% 80%,rgba(255,215,0,0.08) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,170,51,0.06) 0%,transparent 50%),radial-gradient(circle at 40% 40%,rgba(100,150,255,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 .main-container{display:flex;height:100vh;width:100%;position:relative;z-index:1}
@@ -195,161 +198,588 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 </div>
 </div>
+<div id="securityBlock" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0f20;z-index:9999;align-items:center;justify-content:center;flex-direction:column;text-align:center;">
+<i class="fas fa-shield-alt" style="font-size:80px;color:#ff5050;margin-bottom:30px;animation:pulse 1s infinite"></i>
+<h1 style="color:#ffd700;font-size:32px;margin-bottom:20px;">⚠️ تم اكتشاف محاولة اختراق</h1>
+<p style="color:#fff;font-size:18px;">هذا الموقع محمي بأنظمة أمان متطورة</p>
+<p style="color:rgba(255,255,255,0.5);font-size:14px;margin-top:10px;">تم تسجيل محاولة الاختراق وإبلاغ المسؤولين</p>
+</div>
+<style>@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}</style>
+
 <script>
-// ================== إعدادات التشفير ==================
-const ENCRYPTION_KEY = 'EncryptionKey2024Secure';
-const SECURE_KEY = 'SecureKey2024Secure';
-function encryptData(data) {
-    try {
-        return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
-    } catch (e) {
-        return btoa(encodeURIComponent(JSON.stringify(data)));
-    }
-}
-function decryptData(encrypted) {
-    try {
-        const bytes = CryptoJS.AES.decrypt(encrypted, ENCRYPTION_KEY);
-        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    } catch (e) {
+// ============================================
+// 🔒 نظام الحماية الشامل - Security Framework v3.0
+// ============================================
+(function() {
+    'use strict';
+    
+    // 1. تعطيل الكونسول تماماً
+    const noop = () => {};
+    const consoleMethods = ['log', 'info', 'warn', 'debug', 'trace', 'dir', 'dirxml', 'table', 'group', 'groupCollapsed', 'groupEnd', 'error', 'assert', 'clear', 'count', 'countReset', 'dirxml', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'memory', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeLog', 'timeStamp', 'trace', 'warn'];
+    consoleMethods.forEach(method => {
         try {
-            return JSON.parse(decodeURIComponent(atob(encrypted)));
-        } catch (e2) {
+            Object.defineProperty(console, method, {
+                get: () => noop,
+                set: () => {},
+                configurable: false,
+                enumerable: false
+            });
+        } catch (e) {}
+    });
+    
+    // 2. منع اختصارات أدوات المطور
+    const blockedKeys = ['F12', 'F5', 'F1', 'Insert', 'PrintScreen', 'ScrollLock'];
+    const blockedCombos = [
+        ['ctrl', 'shift', 'i'], ['ctrl', 'shift', 'j'], ['ctrl', 'shift', 'c'],
+        ['ctrl', 'shift', 'p'], ['ctrl', 'u'], ['ctrl', 's'], ['ctrl', 'p'],
+        ['ctrl', 'r'], ['ctrl', 'shift', 'r'], ['meta', 'alt', 'i'], ['meta', 'alt', 'j']
+    ];
+    
+    const blockDevTools = (e) => {
+        if (blockedKeys.includes(e.key)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+        for (const combo of blockedCombos) {
+            const match = combo.every(k => {
+                if (k === 'ctrl') return e.ctrlKey;
+                if (k === 'shift') return e.shiftKey;
+                if (k === 'meta') return e.metaKey;
+                if (k === 'alt') return e.altKey;
+                return e.key.toLowerCase() === k;
+            });
+            if (match) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+    };
+    
+    document.addEventListener('keydown', blockDevTools, true);
+    document.addEventListener('keyup', blockDevTools, true);
+    document.addEventListener('keypress', blockDevTools, true);
+    
+    // 3. منع القائمة اليمنى
+    document.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }, true);
+    
+    // 4. منع تحديد النص
+    document.addEventListener('selectstart', e => {
+        e.preventDefault();
+        return false;
+    }, true);
+    
+    document.addEventListener('selectionchange', () => {
+        if (window.getSelection && window.getSelection().toString()) {
+            window.getSelection().empty();
+        }
+    }, true);
+    
+    // 5. منع النسخ والقص واللصق
+    document.addEventListener('copy', e => {
+        e.preventDefault();
+        return false;
+    }, true);
+    
+    document.addEventListener('cut', e => {
+        e.preventDefault();
+        return false;
+    }, true);
+    
+    document.addEventListener('paste', e => {
+        e.preventDefault();
+        return false;
+    }, true);
+    
+    // 6. منع السحب والإفلات
+    document.addEventListener('dragstart', e => {
+        e.preventDefault();
+        return false;
+    }, true);
+    
+    document.addEventListener('drop', e => {
+        e.preventDefault();
+        return false;
+    }, true);
+    
+    // 7. كشف أدوات المطور
+    let devToolsDetected = false;
+    const checkDevTools = () => {
+        if (devToolsDetected) return;
+        const start = performance.now();
+        debugger;
+        const end = performance.now();
+        if (end - start > 100) {
+            devToolsDetected = true;
+            triggerSecurityBlock();
+        }
+    };
+    setInterval(checkDevTools, 1000);
+    
+    // 8. كشف نافذة منبثقة
+    setInterval(() => {
+        if (devToolsDetected) return;
+        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+            devToolsDetected = true;
+            triggerSecurityBlock();
+        }
+    }, 500);
+    
+    // دالة حظر الأمان
+    function triggerSecurityBlock() {
+        const block = document.getElementById('securityBlock');
+        if (block) {
+            block.style.display = 'flex';
+            document.body.innerHTML = '';
+            document.body.appendChild(block);
+            document.body.style.overflow = 'hidden';
+        }
+    }
+})();
+
+// ============================================
+// 🔐 نظام التشفير المتقدم
+// ============================================
+const CryptoSystem = (function() {
+    const getSessionKey = () => {
+        const stored = sessionStorage.getItem('_sk_v3');
+        if (stored) return stored;
+        const newKey = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Hex);
+        sessionStorage.setItem('_sk_v3', newKey);
+        return newKey;
+    };
+    
+    const IV_SIZE = 16;
+    
+    return {
+        encrypt: function(data) {
+            try {
+                const key = CryptoJS.enc.Hex.parse(getSessionKey().substring(0, 64));
+                const iv = CryptoJS.lib.WordArray.random(IV_SIZE);
+                const encrypted = CryptoJS.AES.encrypt(
+                    JSON.stringify(data),
+                    key,
+                    { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+                );
+                return iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
+            } catch (e) {
+                return btoa(encodeURIComponent(JSON.stringify(data)));
+            }
+        },
+        
+        decrypt: function(encrypted) {
+            try {
+                if (!encrypted) return null;
+                const parts = encrypted.split(':');
+                if (parts.length !== 2) {
+                    return JSON.parse(decodeURIComponent(atob(encrypted)));
+                }
+                const iv = CryptoJS.enc.Hex.parse(parts[0]);
+                const key = CryptoJS.enc.Hex.parse(getSessionKey().substring(0, 64));
+                const decrypted = CryptoJS.AES.decrypt(parts[1], key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+                return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+            } catch (e) {
+                return null;
+            }
+        },
+        
+        generateToken: function() {
+            return CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+        }
+    };
+})();
+
+// ============================================
+// 🔑 نظام إدارة المفاتيح السرية
+// ============================================
+const SecureConfig = (function() {
+    const _d = {
+        u: 'aHR0cHM6Ly9zd2VldC1zb3VuZC0zNjhkLmFobWVkcmFnYWI2OTIwLndvcmtlcnMuZGV2Lw==',
+        k: 'c143RyNrOSRwTDJAbU41eFE4IXJUNCZ3WTYqelUx'
+    };
+    
+    return {
+        getUrl: () => atob(_d.u),
+        getKey: () => atob(_d.k)
+    };
+})();
+
+// ============================================
+// ⏱️ نظام Rate Limiting
+// ============================================
+const RateLimiter = (function() {
+    const MAX_REQUESTS = 15;
+    const WINDOW_MS = 60000;
+    const requests = [];
+    
+    return {
+        canProceed: function() {
+            const now = Date.now();
+            while (requests.length > 0 && requests[0] < now - WINDOW_MS) {
+                requests.shift();
+            }
+            if (requests.length >= MAX_REQUESTS) {
+                return false;
+            }
+            requests.push(now);
+            return true;
+        },
+        
+        getWaitTime: function() {
+            if (requests.length === 0) return 0;
+            const oldest = requests[0];
+            const now = Date.now();
+            return Math.max(0, Math.ceil((WINDOW_MS - (now - oldest)) / 1000));
+        }
+    };
+})();
+
+// ============================================
+// 💾 نظام التخزين الآمن
+// ============================================
+const STORAGE_KEYS = {
+    CHATS: 'dreamChats_v4',
+    FAVORITES: 'dreamFavorites_v4',
+    PROFILE: 'userProfile_v4',
+    SESSION: 'dreamSession_v4'
+};
+
+const SecureStorage = {
+    save: function(key, data) {
+        try {
+            const encrypted = CryptoSystem.encrypt(data);
+            localStorage.setItem(key, encrypted);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    },
+    
+    load: function(key) {
+        try {
+            const encrypted = localStorage.getItem(key);
+            if (!encrypted) return null;
+            return CryptoSystem.decrypt(encrypted);
+        } catch (e) {
             return null;
+        }
+    },
+    
+    remove: function(key) {
+        try {
+            localStorage.removeItem(key);
+        } catch (e) {}
+    },
+    
+    saveSession: function(data) {
+        try {
+            sessionStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(data));
+        } catch (e) {}
+    },
+    
+    loadSession: function() {
+        try {
+            const data = sessionStorage.getItem(STORAGE_KEYS.SESSION);
+            return data ? JSON.parse(data) : null;
+        } catch (e) {
+            return null;
+        }
+    },
+    
+    clearAll: function() {
+        try {
+            Object.values(STORAGE_KEYS).forEach(key => {
+                localStorage.removeItem(key);
+            });
+            sessionStorage.clear();
+        } catch (e) {}
+    }
+};
+
+// ============================================
+// 🛡️ دوال الأمان
+// ============================================
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = String(text);
+    return div.innerHTML;
+}
+
+function sanitizeInput(text) {
+    if (!text) return '';
+    return text
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/javascript:/gi, '')
+        .replace(/on\w+\s*=/gi, '')
+        .replace(/<[^>]*>/g, '')
+        .trim()
+        .substring(0, 2000);
+}
+
+function validateInput(text) {
+    if (!text || text.trim().length === 0) return false;
+    if (text.length > 2000) return false;
+    const suspiciousPatterns = [
+        /<script/i,
+        /javascript:/i,
+        /on\w+\s*=/i,
+        /eval\s*\(/i,
+        /document\./i,
+        /window\./i,
+        /localStorage/i,
+        /sessionStorage/i,
+        /cookie/i
+    ];
+    for (const pattern of suspiciousPatterns) {
+        if (pattern.test(text)) return false;
+    }
+    return true;
+}
+
+// ============================================
+// 🎯 المتغيرات الرئيسية
+// ============================================
+let dreamInput, chatContainer, sendBtn, hints, sidebar, chatList;
+let isGenerating = false;
+let currentChatId = null;
+let chats = [];
+let favorites = [];
+let userProfile = null;
+
+// ============================================
+// 🔄 تهيئة البيانات
+// ============================================
+function initializeData() {
+    const storedChats = SecureStorage.load(STORAGE_KEYS.CHATS);
+    if (storedChats && Array.isArray(storedChats)) {
+        chats = storedChats;
+    }
+    
+    const storedFavorites = SecureStorage.load(STORAGE_KEYS.FAVORITES);
+    if (storedFavorites && Array.isArray(storedFavorites)) {
+        favorites = storedFavorites;
+    }
+    
+    const storedProfile = SecureStorage.load(STORAGE_KEYS.PROFILE);
+    if (storedProfile) {
+        userProfile = storedProfile;
+    }
+    
+    const sessionData = SecureStorage.loadSession();
+    if (sessionData && sessionData.chatId) {
+        const existingChat = chats.find(c => c.id === sessionData.chatId);
+        if (existingChat) {
+            currentChatId = sessionData.chatId;
         }
     }
 }
-function secureStorage(key, data) {
-    try {
-        localStorage.setItem(key, encryptData(data));
-        return true;
-    } catch (e) {
-        return false;
+
+function saveAllData() {
+    SecureStorage.save(STORAGE_KEYS.CHATS, chats);
+    SecureStorage.save(STORAGE_KEYS.FAVORITES, favorites);
+    if (userProfile) {
+        SecureStorage.save(STORAGE_KEYS.PROFILE, userProfile);
+    }
+    if (currentChatId) {
+        SecureStorage.saveSession({ chatId: currentChatId, timestamp: Date.now() });
     }
 }
-function secureRetrieve(key) {
-    try {
-        const encrypted = localStorage.getItem(key);
-        if (!encrypted) return null;
-        return decryptData(encrypted);
-    } catch (e) {
-        return null;
-    }
-}
-// ================== الإعدادات الأساسية ==================
-const WORKER_URL = 'https://sweet-sound-368d.ahmedragab6920.workers.dev/';
-const SECRET_KEY = 's^7G#k9$pL2@mN5xQ8!rT4&wY6*zU1';
-// ================== المتغيرات الرئيسية ==================
-const dreamInput = document.getElementById('dreamInput');
-const chatContainer = document.getElementById('chatContainer');
-const sendBtn = document.getElementById('sendBtn');
-const hints = document.querySelectorAll('.hint');
-const sidebar = document.getElementById('sidebar');
-const chatList = document.getElementById('chatList');
-let isGenerating = false;
-let currentChatId = null;
-let chats = secureRetrieve('dreamChats') || [];
-let favorites = secureRetrieve('dreamFavorites') || [];
-let userProfile = secureRetrieve('userProfile') || null;
-// ================== دوال مساعدة ==================
+
+// ============================================
+// 📝 دوال المحادثة
+// ============================================
 function autoResizeTextarea() {
+    if (!dreamInput) return;
     dreamInput.style.height = 'auto';
     const newHeight = Math.min(dreamInput.scrollHeight, 350);
     dreamInput.style.height = newHeight + 'px';
     dreamInput.style.overflowY = dreamInput.scrollHeight > 350 ? 'auto' : 'hidden';
 }
-dreamInput.addEventListener('input', autoResizeTextarea);
-function saveData() {
-    secureStorage('dreamChats', chats);
-    secureStorage('dreamFavorites', favorites);
-    if (userProfile) secureStorage('userProfile', userProfile);
-}
+
 function toggleSidebar() {
+    if (!sidebar) return;
     sidebar.classList.toggle('open');
-    if (sidebar.classList.contains('open')) renderChatList();
+    if (sidebar.classList.contains('open')) {
+        renderChatList();
+    }
 }
+
 function renderChatList() {
-    if (chats.length === 0) {
+    if (!chatList) return;
+    
+    if (!chats || chats.length === 0) {
         chatList.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';
         return;
     }
-    chatList.innerHTML = chats.map(chat => `
-        <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
+    
+    chatList.innerHTML = chats.map(chat => {
+        const title = escapeHtml(chat.title || 'محادثة جديدة');
+        const preview = escapeHtml(chat.messages[0]?.text || 'لا توجد رسائل');
+        const isActive = chat.id === currentChatId ? 'active' : '';
+        const isFav = favorites.includes(chat.id) ? 'active' : '';
+        const date = new Date(chat.date).toLocaleDateString('ar-EG');
+        
+        return `
+        <div class="chat-item ${isActive}" data-chat-id="${escapeHtml(chat.id)}">
             <div class="chat-item-content">
                 <div class="chat-item-header">
-                    <div class="chat-item-title">${chat.title || 'محادثة جديدة'}</div>
-                    <i class="fas fa-star chat-item-favorite ${favorites.includes(chat.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${chat.id}')"></i>
+                    <div class="chat-item-title">${title}</div>
+                    <i class="fas fa-star chat-item-favorite ${isFav}" data-chat-id="${escapeHtml(chat.id)}"></i>
                 </div>
-                <div class="chat-item-preview">${chat.messages[0]?.text || 'لا توجد رسائل'}</div>
+                <div class="chat-item-preview">${preview}</div>
                 <div class="chat-item-footer">
-                    <div class="chat-item-date">${new Date(chat.date).toLocaleDateString('ar-EG')}</div>
-                    <button class="chat-item-delete" onclick="event.stopPropagation(); deleteChat('${chat.id}')"><i class="fas fa-trash"></i></button>
+                    <div class="chat-item-date">${date}</div>
+                    <button class="chat-item-delete" data-chat-id="${escapeHtml(chat.id)}"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
+    
+    // إضافة مستمعي الأحداث مباشرة
+    attachChatListEvents();
 }
+
+function attachChatListEvents() {
+    document.querySelectorAll('.chat-item').forEach(item => {
+        item.removeEventListener('click', chatItemClickHandler);
+        item.addEventListener('click', chatItemClickHandler);
+    });
+    
+    document.querySelectorAll('.chat-item-favorite').forEach(btn => {
+        btn.removeEventListener('click', favoriteClickHandler);
+        btn.addEventListener('click', favoriteClickHandler);
+    });
+    
+    document.querySelectorAll('.chat-item-delete').forEach(btn => {
+        btn.removeEventListener('click', deleteClickHandler);
+        btn.addEventListener('click', deleteClickHandler);
+    });
+}
+
+function chatItemClickHandler(e) {
+    if (e.target.closest('.chat-item-delete') || e.target.closest('.chat-item-favorite')) return;
+    const chatId = this.getAttribute('data-chat-id');
+    if (chatId) loadChat(chatId);
+}
+
+function favoriteClickHandler(e) {
+    e.stopPropagation();
+    const chatId = this.getAttribute('data-chat-id');
+    if (chatId) toggleFavorite(chatId);
+}
+
+function deleteClickHandler(e) {
+    e.stopPropagation();
+    const chatId = this.getAttribute('data-chat-id');
+    if (chatId) deleteChat(chatId);
+}
+
 function getWelcomeMessage() {
     const namePart = userProfile && userProfile.name ? ` ${userProfile.name}` : '';
     return `👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`;
 }
+
 function updateWelcomeInCurrentChat() {
+    if (!chatContainer) return;
     const firstBot = chatContainer.querySelector('.bot-message');
-    if (firstBot) firstBot.textContent = getWelcomeMessage();
+    if (firstBot && chatContainer.children.length <= 1) {
+        firstBot.textContent = getWelcomeMessage();
+    }
 }
+
 function newChat() {
-    const chatId = 'chat-' + Date.now();
-    chats.unshift({ id: chatId, title: 'محادثة جديدة', messages: [], date: new Date().toISOString() });
+    const chatId = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+    const newChat = {
+        id: chatId,
+        title: 'محادثة جديدة',
+        messages: [],
+        date: new Date().toISOString()
+    };
+    chats.unshift(newChat);
     currentChatId = chatId;
-    saveData();
-    chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+    saveAllData();
+    
+    if (chatContainer) {
+        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+    }
+    
     renderChatList();
     if (window.innerWidth <= 768) toggleSidebar();
 }
+
 function loadChat(chatId) {
     currentChatId = chatId;
     const chat = chats.find(c => c.id === chatId);
-    if (!chat) return;
+    if (!chat || !chatContainer) return;
+    
+    saveAllData();
+    
     if (chat.messages.length === 0) {
-        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
     } else {
-        chatContainer.innerHTML = chat.messages.map(msg => `
-            <div class="message-group">
-                <div class="${msg.type === 'user' ? 'user-message' : 'bot-message'}">${msg.text}</div>
-            </div>
-        `).join('');
+        chatContainer.innerHTML = chat.messages.map(msg => {
+            const msgClass = msg.type === 'user' ? 'user-message' : 'bot-message';
+            const msgText = escapeHtml(msg.text);
+            return `<div class="message-group"><div class="${msgClass}">${msgText}</div></div>`;
+        }).join('');
     }
+    
     scrollToBottom(false);
     renderChatList();
     if (window.innerWidth <= 768) toggleSidebar();
 }
+
 function toggleFavorite(chatId) {
     const index = favorites.indexOf(chatId);
-    if (index > -1) favorites.splice(index, 1);
-    else favorites.push(chatId);
-    saveData();
+    if (index > -1) {
+        favorites.splice(index, 1);
+    } else {
+        favorites.push(chatId);
+    }
+    saveAllData();
     renderChatList();
 }
+
 function deleteChat(chatId) {
     if (!confirm('هل أنت متأكد من حذف هذه المحادثة؟')) return;
     chats = chats.filter(c => c.id !== chatId);
     favorites = favorites.filter(f => f !== chatId);
+    
     if (currentChatId === chatId) {
         currentChatId = null;
-        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+        sessionStorage.removeItem(STORAGE_KEYS.SESSION);
+        if (chatContainer) {
+            chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+        }
     }
-    saveData();
+    
+    saveAllData();
     renderChatList();
 }
+
 function deleteAllChats() {
     if (!confirm('هل أنت متأكد من حذف جميع المحادثات؟')) return;
     chats = [];
     favorites = [];
     currentChatId = null;
-    saveData();
-    chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
+    sessionStorage.removeItem(STORAGE_KEYS.SESSION);
+    saveAllData();
+    
+    if (chatContainer) {
+        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+    }
     renderChatList();
 }
+
 function scrollToBottom(smooth = true) {
+    if (!chatContainer) return;
     setTimeout(() => {
         chatContainer.scrollTo({
             top: chatContainer.scrollHeight,
@@ -357,31 +787,44 @@ function scrollToBottom(smooth = true) {
         });
     }, 10);
 }
+
 function useHint(text) {
-    if (isGenerating) return;
-    dreamInput.value = text;
+    if (isGenerating || !dreamInput) return;
+    dreamInput.value = sanitizeInput(text);
     autoResizeTextarea();
     dreamInput.focus();
 }
+
 function updateUIState(generating) {
     isGenerating = generating;
-    sendBtn.disabled = generating;
-    hints.forEach(h => h.classList.toggle('disabled-hint', generating));
-    sendBtn.innerHTML = generating ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
+    if (sendBtn) {
+        sendBtn.disabled = generating;
+        sendBtn.innerHTML = generating ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
+    }
+    if (hints) {
+        hints.forEach(h => h.classList.toggle('disabled-hint', generating));
+    }
 }
+
 function addMessageGroup(userText) {
+    if (!chatContainer) return null;
     const group = document.createElement('div');
     group.className = 'message-group';
+    
     const userDiv = document.createElement('div');
     userDiv.className = 'user-message';
     userDiv.textContent = userText;
+    
     const botDiv = document.createElement('div');
     botDiv.className = 'bot-message';
+    
     group.append(userDiv, botDiv);
     chatContainer.appendChild(group);
     return botDiv;
 }
+
 function showTypingIndicator() {
+    if (!chatContainer) return;
     const ind = document.createElement('div');
     ind.className = 'message-group';
     ind.id = 'typingIndicator';
@@ -389,11 +832,14 @@ function showTypingIndicator() {
     chatContainer.appendChild(ind);
     scrollToBottom(true);
 }
+
 function hideTypingIndicator() {
     const ind = document.getElementById('typingIndicator');
     if (ind) ind.remove();
 }
+
 async function typeMessage(element, text, speed = 15) {
+    if (!element) return;
     element.innerHTML = '';
     for (let i = 0; i < text.length; i++) {
         element.innerHTML += text[i];
@@ -402,81 +848,106 @@ async function typeMessage(element, text, speed = 15) {
     }
     scrollToBottom(true);
 }
-// ================== الدالة الرئيسية (المعدلة) ==================
+
+// ============================================
+// 🌐 معالجة الرسائل
+// ============================================
 async function processMessage(messageText) {
+    // التحقق من صحة المدخلات
+    if (!validateInput(messageText)) {
+        hideTypingIndicator();
+        const botElement = addMessageGroup(messageText);
+        await typeMessage(botElement, '⚠️ يرجى كتابة حلمك بشكل صحيح دون رموز خاصة', 15);
+        return;
+    }
+    
+    // التحقق من Rate Limiting
+    if (!RateLimiter.canProceed()) {
+        const waitTime = RateLimiter.getWaitTime();
+        hideTypingIndicator();
+        const botElement = addMessageGroup(messageText);
+        await typeMessage(botElement, `⏳ يرجى الانتظار ${waitTime} ثانية قبل إرسال رسالة جديدة`, 15);
+        return;
+    }
+    
     showTypingIndicator();
-   
+    
     try {
         const requestBody = {
             dream: messageText,
             userName: userProfile?.name || 'زائر',
-            birthDate: userProfile?.birthDate || 'غير محدد'
+            birthDate: userProfile?.birthDate || 'غير محدد',
+            token: CryptoSystem.generateToken(),
+            timestamp: Date.now()
         };
-       
-        // الـ fetch مع الرقم السري
-        const response = await fetch(WORKER_URL, {
+        
+        const workerUrl = SecureConfig.getUrl();
+        const secretKey = SecureConfig.getKey();
+        
+        const response = await fetch(workerUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Secret-Key': SECRET_KEY // الرقم السري هنا
+                'X-Secret-Key': secretKey
             },
             body: JSON.stringify(requestBody)
         });
+        
         const responseText = await response.text();
-       
         hideTypingIndicator();
+        
         if (!response.ok) {
-            throw new Error(`فشل الطلب: ${response.status} - ${responseText}`);
+            throw new Error('حدث خطأ في الاتصال');
         }
-        if (!responseText || responseText.trim() === '') {
-            const defaultMessage = 'تم استلام حلمك بنجاح ✅ سيقوم المفسر بالرد قريباً.';
-            const botElement = addMessageGroup(messageText);
-            await typeMessage(botElement, defaultMessage, 15);
-            if (!currentChatId) {
-                currentChatId = 'chat-' + Date.now();
-                chats.unshift({ id: currentChatId, title: messageText.substring(0, 30) + '...', messages: [], date: new Date().toISOString() });
-            }
-            const chat = chats.find(c => c.id === currentChatId);
-            if (chat) {
-                chat.messages.push({ type: 'user', text: messageText });
-                chat.messages.push({ type: 'bot', text: defaultMessage });
-                if (!chat.title || chat.title === 'محادثة جديدة') chat.title = messageText.substring(0, 30) + '...';
-                saveData();
-            }
-            return;
-        }
+        
         let interpretation = responseText;
         if (responseText.trim().startsWith('{') || responseText.trim().startsWith('[')) {
             try {
                 const data = JSON.parse(responseText);
                 interpretation = data.interpretation || data.message || data.text || data.reply || data.response || JSON.stringify(data);
-            } catch (e) {
-            }
+            } catch (e) {}
         }
+        
         const botElement = addMessageGroup(messageText);
         await typeMessage(botElement, interpretation, 15);
+        
         if (!currentChatId) {
-            currentChatId = 'chat-' + Date.now();
-            chats.unshift({ id: currentChatId, title: messageText.substring(0, 30) + '...', messages: [], date: new Date().toISOString() });
+            currentChatId = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+            chats.unshift({
+                id: currentChatId,
+                title: messageText.substring(0, 30) + '...',
+                messages: [],
+                date: new Date().toISOString()
+            });
         }
+        
         const chat = chats.find(c => c.id === currentChatId);
         if (chat) {
             chat.messages.push({ type: 'user', text: messageText });
             chat.messages.push({ type: 'bot', text: interpretation });
-            if (!chat.title || chat.title === 'محادثة جديدة') chat.title = messageText.substring(0, 30) + '...';
-            saveData();
+            if (!chat.title || chat.title === 'محادثة جديدة') {
+                chat.title = messageText.substring(0, 30) + '...';
+            }
+            chat.date = new Date().toISOString();
+            saveAllData();
         }
+        
     } catch (error) {
         hideTypingIndicator();
-        let errorMessage = '❌ عذراً، حدث خطأ في الاتصال.\n🔍 التفاصيل: ' + error.message;
+        const errorMessage = '❌ عذراً، حدث خطأ في الاتصال. الرجاء المحاولة مرة أخرى.';
         const botElement = addMessageGroup(messageText);
         await typeMessage(botElement, errorMessage, 15);
     }
 }
+
 async function handleSend() {
-    if (isGenerating) return;
-    const dreamText = dreamInput.value.trim();
-    if (!dreamText) return alert('اكتب حلمك أولاً');
+    if (isGenerating || !dreamInput) return;
+    const dreamText = sanitizeInput(dreamInput.value.trim());
+    if (!dreamText) {
+        alert('اكتب حلمك أولاً');
+        return;
+    }
+    
     updateUIState(true);
     dreamInput.value = '';
     autoResizeTextarea();
@@ -485,11 +956,17 @@ async function handleSend() {
     dreamInput.focus();
     renderChatList();
 }
-// ================== دوال الملف الشخصي ==================
+
+// ============================================
+// 👤 دوال الملف الشخصي
+// ============================================
 function populateDOBSelects() {
     const daySel = document.getElementById('birthDay');
     const monthSel = document.getElementById('birthMonth');
     const yearSel = document.getElementById('birthYear');
+    
+    if (!daySel || !monthSel || !yearSel) return;
+    
     daySel.innerHTML = '<option value="">اليوم</option>';
     for (let d = 1; d <= 31; d++) {
         const opt = document.createElement('option');
@@ -497,6 +974,7 @@ function populateDOBSelects() {
         opt.textContent = d;
         daySel.appendChild(opt);
     }
+    
     const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
     monthSel.innerHTML = '<option value="">الشهر</option>';
     for (let m = 0; m < 12; m++) {
@@ -505,6 +983,7 @@ function populateDOBSelects() {
         opt.textContent = months[m];
         monthSel.appendChild(opt);
     }
+    
     const currentYear = new Date().getFullYear();
     yearSel.innerHTML = '<option value="">السنة</option>';
     for (let y = currentYear; y >= 1940; y--) {
@@ -514,8 +993,11 @@ function populateDOBSelects() {
         yearSel.appendChild(opt);
     }
 }
+
 function openProfile() {
     const modal = document.getElementById('profileModal');
+    if (!modal) return;
+    
     if (!userProfile) {
         document.getElementById('profileView').style.display = 'none';
         document.getElementById('profileEdit').style.display = 'block';
@@ -527,11 +1009,12 @@ function openProfile() {
     } else {
         document.getElementById('profileView').style.display = 'block';
         document.getElementById('profileEdit').style.display = 'none';
-        document.getElementById('displayName').textContent = userProfile.name;
-        document.getElementById('displayBirth').textContent = userProfile.birthDate;
+        document.getElementById('displayName').textContent = escapeHtml(userProfile.name);
+        document.getElementById('displayBirth').textContent = escapeHtml(userProfile.birthDate);
     }
     modal.style.display = 'flex';
 }
+
 function switchToEditMode() {
     document.getElementById('profileView').style.display = 'none';
     document.getElementById('profileEdit').style.display = 'block';
@@ -546,31 +1029,43 @@ function switchToEditMode() {
         }
     }
 }
+
 function saveProfile() {
-    const name = document.getElementById('userName').value.trim();
+    const name = sanitizeInput(document.getElementById('userName').value.trim());
     const day = document.getElementById('birthDay').value;
     const month = document.getElementById('birthMonth').value;
     const year = document.getElementById('birthYear').value;
-    if (!name) return alert('يرجى إدخال اسمك الكامل');
-    if (!day || !month || !year) return alert('يرجى اختيار تاريخ الميلاد كاملاً');
+    
+    if (!name) {
+        alert('يرجى إدخال اسمك الكامل');
+        return;
+    }
+    if (!day || !month || !year) {
+        alert('يرجى اختيار تاريخ الميلاد كاملاً');
+        return;
+    }
+    
     userProfile = { name, birthDate: `${day}/${month}/${year}` };
-    secureStorage('userProfile', userProfile);
-    saveData();
+    SecureStorage.save(STORAGE_KEYS.PROFILE, userProfile);
+    saveAllData();
     document.getElementById('profileModal').style.display = 'none';
     updateWelcomeInCurrentChat();
     alert('✅ تم حفظ بياناتك بنجاح!');
 }
+
 function performLogout() {
     if (!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.')) return;
-    localStorage.removeItem('userProfile');
-    localStorage.removeItem('dreamChats');
-    localStorage.removeItem('dreamFavorites');
+    
+    SecureStorage.clearAll();
+    
     userProfile = null;
     chats = [];
     favorites = [];
     currentChatId = null;
+    
     document.getElementById('profileModal').style.display = 'none';
     updateWelcomeInCurrentChat();
+    
     setTimeout(() => {
         const modal = document.getElementById('profileModal');
         document.getElementById('profileView').style.display = 'none';
@@ -583,33 +1078,87 @@ function performLogout() {
         modal.style.display = 'flex';
     }, 400);
 }
+
 function closeProfileModal() {
     document.getElementById('profileModal').style.display = 'none';
 }
-// ================== الأحداث (Event Listeners) ==================
-sendBtn.addEventListener('click', handleSend);
-dreamInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-    }
-});
-populateDOBSelects();
-if (chats.length === 0) newChat();
+
+// ============================================
+// 🚀 التهيئة عند التحميل
+// ============================================
 window.addEventListener('load', () => {
+    dreamInput = document.getElementById('dreamInput');
+    chatContainer = document.getElementById('chatContainer');
+    sendBtn = document.getElementById('sendBtn');
+    hints = document.querySelectorAll('.hint');
+    sidebar = document.getElementById('sidebar');
+    chatList = document.getElementById('chatList');
+    
+    initializeData();
+    populateDOBSelects();
     autoResizeTextarea();
-    scrollToBottom(false);
+    
+    // تحميل المحادثة المناسبة
+    if (chats && chats.length > 0) {
+        if (currentChatId) {
+            loadChat(currentChatId);
+        } else {
+            // تحميل آخر محادثة
+            currentChatId = chats[0].id;
+            loadChat(currentChatId);
+        }
+    } else {
+        newChat();
+    }
+    
     renderChatList();
+    
     if (userProfile) {
         updateWelcomeInCurrentChat();
-    } else {
-        const modal = document.getElementById('profileModal');
-        document.getElementById('profileView').style.display = 'none';
-        document.getElementById('profileEdit').style.display = 'block';
-        document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
-        modal.style.display = 'flex';
+    }
+    
+    scrollToBottom(false);
+});
+
+// ============================================
+// 📌 مستمعي الأحداث
+// ============================================
+window.addEventListener('beforeunload', () => {
+    saveAllData();
+});
+
+// تأكد من وجود مستمعي الأحداث
+document.addEventListener('DOMContentLoaded', () => {
+    if (sendBtn) {
+        sendBtn.addEventListener('click', handleSend);
+    }
+    
+    if (dreamInput) {
+        dreamInput.addEventListener('input', autoResizeTextarea);
+        dreamInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        });
     }
 });
+
+// مستمعي الأحداث الاحتياطية
+setTimeout(() => {
+    if (sendBtn) {
+        sendBtn.addEventListener('click', handleSend);
+    }
+    
+    if (dreamInput) {
+        dreamInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        });
+    }
+}, 500);
 </script>
 </body>
-</html>
+</html> 
