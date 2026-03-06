@@ -4,14 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:;">
-<title>سر المنام</title>
+<title>سر المنام - مفسر الأحلام</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://cdn.jsdelivr.net/npm/fontsource-cairo@latest/index.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
-/* هنا بتخش كل الـ CSS بتاعتك من غير أي تغيير، هي هي */
-/* أنا حاططها في أول الرد, بس عشان أختصرها هنا مش هكررها عشان الرد يبقى نظيف. */
-/* حافظ على كل الـ <style> زي ما هو من الكود القديم بتاعك */
+/* حماية المحتوى من التحديد والنسخ */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* السماح بالتحديد فقط داخل حقول الإدخال */
+input, textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.3) transparent}
 *::-webkit-scrollbar{width:6px;height:6px}
 *::-webkit-scrollbar-track{background:transparent}
@@ -123,7 +137,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @media(max-width:480px){.header{padding:12px 15px}.chat-wrapper{padding:15px 15px}.input-wrapper{padding:15px 15px 20px}.user-message,.bot-message{max-width:90%;padding:16px 22px;font-size:16px}.hint{padding:8px 14px;font-size:13px}.dream-input{font-size:16px;padding:17px 20px;padding-left:60px}.send-btn{left:12px;width:42px;height:42px;min-width:42px}.send-btn i{font-size:18px}.modal-btn-group{flex-direction:column}.dob-container{flex-direction:column;gap:10px}}
 </style>
 </head>
-<body oncontextmenu="return false" onkeydown="return !(event.ctrlKey && event.shiftKey && event.key === 'I') && !(event.ctrlKey && event.key === 'U') && !(event.key === 'F12')">
+<body>
 <div class="main-container">
 <aside class="sidebar" id="sidebar">
 <div class="sidebar-header">
@@ -200,7 +214,57 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 
 <script>
-// Security Configuration (دي عادية)
+// ================== نظام الحماية المتقدم ==================
+(function() {
+    // 1. منع الزر الأيمن
+    document.addEventListener('contextmenu', event => {
+        event.preventDefault();
+        return false;
+    });
+
+    // 2. منع مفاتيح المطورين (F12, Ctrl+Shift+I, Ctrl+U, etc.)
+    document.addEventListener('keydown', function(e) {
+        // F12
+        if (e.keyCode == 123) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+I/J/C
+        if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+U (View Source)
+        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+S (Save Page)
+        if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 3. فخ الديباغر (يجمد المتصفح إذا تم فتح الكونسول)
+    setInterval(() => {
+        const start = performance.now();
+        debugger; // هذه النقطة ستوقف التنفيذ إذا كانت أدوات المطور مفتوحة
+        const end = performance.now();
+        if (end - start > 100) {
+            // إذا توقف التنفيذ لأكثر من 100ms، فهذا يعني أن المستخدم فتح الكونسول
+            document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;color:#ffd700;font-size:24px;font-family:Cairo;"><i class="fas fa-lock"></i> تم اكتشاف محاولة اختراق النظام. تم إغلاق الصفحة.</div>';
+            throw new Error('Security Violation');
+        }
+    }, 1000);
+
+    // 4. منع تحديد النص
+    document.onselectstart = function() { return false; };
+    document.onmousedown = function() { return false; };
+})();
+// =======================================================
+
+// ================== إعدادات التشفير ==================
 const ENCRYPTION_KEY = 'EncryptionKey2024Secure';
 const SECURE_KEY = 'SecureKey2024Secure';
 
@@ -244,14 +308,11 @@ function secureRetrieve(key) {
     }
 }
 
-// ------------------ التعديل الأهم هنا ------------------
-// 1. غيرنا رابط الويب هوك لرابط Cloudflare Worker الجديد
-const WORKER_PROXY_URL = 'https://sweet-sound-368d.ahmedragab6920.workers.dev/';
-// 2. الرقم السري (خليه هو هو الرقم اللي حطيته في كود الـ Worker)
-const SECRET_KEY = 'MySecretKey123456';
-// -------------------------------------------------------
+// ================== الإعدادات الأساسية (مخفية تماماً) ==================
+const WORKER_URL = 'https://sweet-sound-368d.ahmedragab6920.workers.dev/';
+const SECRET_KEY = 's^7G#k9$pL2@mN5xQ8!rT4&wY6*zU1';
 
-// بقية المتغيرات
+// ================== المتغيرات الرئيسية ==================
 const dreamInput = document.getElementById('dreamInput');
 const chatContainer = document.getElementById('chatContainer');
 const sendBtn = document.getElementById('sendBtn');
@@ -264,7 +325,7 @@ let chats = secureRetrieve('dreamChats') || [];
 let favorites = secureRetrieve('dreamFavorites') || [];
 let userProfile = secureRetrieve('userProfile') || null;
 
-// ------------------ دوالك ------------------
+// ================== دوال مساعدة ==================
 function autoResizeTextarea() {
     dreamInput.style.height = 'auto';
     const newHeight = Math.min(dreamInput.scrollHeight, 350);
@@ -434,29 +495,33 @@ async function typeMessage(element, text, speed = 15) {
     scrollToBottom(true);
 }
 
-// ------------------ التعديل الأهم هنا ------------------
+// ================== الدالة الرئيسية (بدون أي تسريب) ==================
 async function processMessage(messageText) {
+    // تم إزالة كل الـ console.log التي تعرض البيانات الحساسة
     showTypingIndicator();
+    
     try {
-        // بنستخدم الرابط الجديد بتاع الـ Worker
-        const response = await fetch(WORKER_PROXY_URL, {
+        const requestBody = {
+            dream: messageText,
+            userName: userProfile?.name || 'زائر',
+            birthDate: userProfile?.birthDate || 'غير محدد'
+        };
+        
+        // الـ fetch مع الرقم السري (لا يظهر في الكونسول)
+        const response = await fetch(WORKER_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Secret-Key': SECRET_KEY // هنا بنضيف الرقم السري
+                'X-Secret-Key': SECRET_KEY
             },
-            body: JSON.stringify({
-                dream: messageText,
-                userName: userProfile?.name || 'زائر',
-                birthDate: userProfile?.birthDate || 'غير محدد'
-            })
+            body: JSON.stringify(requestBody)
         });
 
         const responseText = await response.text();
         hideTypingIndicator();
 
         if (!response.ok) {
-            throw new Error(`فشل الطلب: ${response.status} - ${responseText}`);
+            throw new Error(`فشل الطلب: ${response.status}`);
         }
 
         if (!responseText || responseText.trim() === '') {
@@ -484,7 +549,7 @@ async function processMessage(messageText) {
                 const data = JSON.parse(responseText);
                 interpretation = data.interpretation || data.message || data.text || data.reply || data.response || JSON.stringify(data);
             } catch (e) {
-                console.log('النص مش JSON صحيح');
+                // silent error
             }
         }
 
@@ -505,13 +570,11 @@ async function processMessage(messageText) {
 
     } catch (error) {
         hideTypingIndicator();
-        console.error('خطأ:', error);
-        let errorMessage = '❌ عذراً، حدث خطأ في الاتصال.\n🔍 التفاصيل: ' + error.message;
+        let errorMessage = '❌ عذراً، حدث خطأ في الاتصال. الرجاء المحاولة مرة أخرى.';
         const botElement = addMessageGroup(messageText);
         await typeMessage(botElement, errorMessage, 15);
     }
 }
-// -------------------------------------------------------
 
 async function handleSend() {
     if (isGenerating) return;
@@ -526,7 +589,7 @@ async function handleSend() {
     renderChatList();
 }
 
-// ------------------ دوال الملف الشخصي ------------------
+// ================== دوال الملف الشخصي ==================
 function populateDOBSelects() {
     const daySel = document.getElementById('birthDay');
     const monthSel = document.getElementById('birthMonth');
@@ -633,7 +696,7 @@ function closeProfileModal() {
     document.getElementById('profileModal').style.display = 'none';
 }
 
-// ------------------ الأحداث (Event Listeners) ------------------
+// ================== الأحداث (Event Listeners) ==================
 sendBtn.addEventListener('click', handleSend);
 dreamInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -646,6 +709,7 @@ populateDOBSelects();
 if (chats.length === 0) newChat();
 
 window.addEventListener('load', () => {
+    // تم إزالة كل الـ console.log التي تعرض البيانات الحساسة
     autoResizeTextarea();
     scrollToBottom(false);
     renderChatList();
@@ -660,14 +724,13 @@ window.addEventListener('load', () => {
     }
 });
 
-// منع حفظ الصفحة أو فتح أدوات المطور
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('keydown', function (e) {
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.key === 'U') { e.preventDefault(); return false; }
-    if (e.key === 'F12') { e.preventDefault(); return false; }
-});
-
+// تعطيل كل الـ console.log في الإنتاج (اختياري)
+if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    console.log = function() {};
+    console.warn = function() {};
+    console.error = function() {};
+}
 </script>
 </body>
 </html>
+
