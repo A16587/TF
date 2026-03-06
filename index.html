@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data:; connect-src 'self' https:; frame-src 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'none'; object-src 'none'">
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
@@ -205,341 +206,288 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 <p style="color:rgba(255,255,255,0.5);font-size:14px;margin-top:10px;">تم تسجيل محاولة الاختراق وإبلاغ المسؤولين</p>
 </div>
 <style>@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}</style>
-
 <script>
 // ============================================
-// 🔒 نظام الحماية الشامل - Security Framework v3.0
+// 🔒 نظام الحماية الشامل
 // ============================================
 (function() {
-    'use strict';
-    
-    // 1. تعطيل الكونسول تماماً
-    const noop = () => {};
-    const consoleMethods = ['log', 'info', 'warn', 'debug', 'trace', 'dir', 'dirxml', 'table', 'group', 'groupCollapsed', 'groupEnd', 'error', 'assert', 'clear', 'count', 'countReset', 'dirxml', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'memory', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeLog', 'timeStamp', 'trace', 'warn'];
-    consoleMethods.forEach(method => {
-        try {
-            Object.defineProperty(console, method, {
-                get: () => noop,
-                set: () => {},
-                configurable: false,
-                enumerable: false
-            });
-        } catch (e) {}
-    });
-    
-    // 2. منع اختصارات أدوات المطور
-    const blockedKeys = ['F12', 'F5', 'F1', 'Insert', 'PrintScreen', 'ScrollLock'];
-    const blockedCombos = [
-        ['ctrl', 'shift', 'i'], ['ctrl', 'shift', 'j'], ['ctrl', 'shift', 'c'],
-        ['ctrl', 'shift', 'p'], ['ctrl', 'u'], ['ctrl', 's'], ['ctrl', 'p'],
-        ['ctrl', 'r'], ['ctrl', 'shift', 'r'], ['meta', 'alt', 'i'], ['meta', 'alt', 'j']
-    ];
-    
-    const blockDevTools = (e) => {
-        if (blockedKeys.includes(e.key)) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-        for (const combo of blockedCombos) {
-            const match = combo.every(k => {
-                if (k === 'ctrl') return e.ctrlKey;
-                if (k === 'shift') return e.shiftKey;
-                if (k === 'meta') return e.metaKey;
-                if (k === 'alt') return e.altKey;
-                return e.key.toLowerCase() === k;
-            });
-            if (match) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-        }
-    };
-    
-    document.addEventListener('keydown', blockDevTools, true);
-    document.addEventListener('keyup', blockDevTools, true);
-    document.addEventListener('keypress', blockDevTools, true);
-    
-    // 3. منع القائمة اليمنى
-    document.addEventListener('contextmenu', e => {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    }, true);
-    
-    // 4. منع تحديد النص
-    document.addEventListener('selectstart', e => {
-        e.preventDefault();
-        return false;
-    }, true);
-    
-    document.addEventListener('selectionchange', () => {
-        if (window.getSelection && window.getSelection().toString()) {
-            window.getSelection().empty();
-        }
-    }, true);
-    
-    // 5. منع النسخ والقص واللصق
-    document.addEventListener('copy', e => {
-        e.preventDefault();
-        return false;
-    }, true);
-    
-    document.addEventListener('cut', e => {
-        e.preventDefault();
-        return false;
-    }, true);
-    
-    document.addEventListener('paste', e => {
-        e.preventDefault();
-        return false;
-    }, true);
-    
-    // 6. منع السحب والإفلات
-    document.addEventListener('dragstart', e => {
-        e.preventDefault();
-        return false;
-    }, true);
-    
-    document.addEventListener('drop', e => {
-        e.preventDefault();
-        return false;
-    }, true);
-    
-    // 7. كشف أدوات المطور
-    let devToolsDetected = false;
-    const checkDevTools = () => {
-        if (devToolsDetected) return;
-        const start = performance.now();
-        debugger;
-        const end = performance.now();
-        if (end - start > 100) {
-            devToolsDetected = true;
-            triggerSecurityBlock();
-        }
-    };
-    setInterval(checkDevTools, 1000);
-    
-    // 8. كشف نافذة منبثقة
-    setInterval(() => {
-        if (devToolsDetected) return;
-        if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
-            devToolsDetected = true;
-            triggerSecurityBlock();
-        }
-    }, 500);
-    
-    // دالة حظر الأمان
-    function triggerSecurityBlock() {
-        const block = document.getElementById('securityBlock');
-        if (block) {
-            block.style.display = 'flex';
-            document.body.innerHTML = '';
-            document.body.appendChild(block);
-            document.body.style.overflow = 'hidden';
-        }
-    }
+'use strict';
+const noop = () => {};
+const consoleMethods = ['log', 'info', 'warn', 'debug', 'trace', 'dir', 'dirxml', 'table', 'group', 'groupCollapsed', 'groupEnd', 'error', 'assert', 'clear', 'count', 'countReset', 'exception', 'memory', 'profile', 'profileEnd', 'time', 'timeEnd', 'timeLog', 'timeStamp'];
+consoleMethods.forEach(method => {
+try {
+Object.defineProperty(console, method, {
+get: () => noop,
+set: () => {},
+configurable: false,
+enumerable: false
+});
+} catch (e) {}
+});
+const blockedKeys = ['F12', 'F5', 'F1', 'Insert', 'PrintScreen', 'ScrollLock'];
+const blockedCombos = [
+['ctrl', 'shift', 'i'], ['ctrl', 'shift', 'j'], ['ctrl', 'shift', 'c'],
+['ctrl', 'shift', 'p'], ['ctrl', 'u'], ['ctrl', 's'], ['ctrl', 'p'],
+['ctrl', 'r'], ['ctrl', 'shift', 'r'], ['meta', 'alt', 'i'], ['meta', 'alt', 'j']
+];
+const blockDevTools = (e) => {
+if (blockedKeys.includes(e.key)) {
+e.preventDefault();
+e.stopPropagation();
+return false;
+}
+for (const combo of blockedCombos) {
+const match = combo.every(k => {
+if (k === 'ctrl') return e.ctrlKey;
+if (k === 'shift') return e.shiftKey;
+if (k === 'meta') return e.metaKey;
+if (k === 'alt') return e.altKey;
+return e.key.toLowerCase() === k;
+});
+if (match) {
+e.preventDefault();
+e.stopPropagation();
+return false;
+}
+}
+};
+document.addEventListener('keydown', blockDevTools, true);
+document.addEventListener('keyup', blockDevTools, true);
+document.addEventListener('keypress', blockDevTools, true);
+document.addEventListener('contextmenu', e => {
+e.preventDefault();
+e.stopPropagation();
+return false;
+}, true);
+document.addEventListener('selectstart', e => {
+e.preventDefault();
+return false;
+}, true);
+document.addEventListener('selectionchange', () => {
+if (window.getSelection && window.getSelection().toString()) {
+window.getSelection().empty();
+}
+}, true);
+document.addEventListener('copy', e => {
+e.preventDefault();
+return false;
+}, true);
+document.addEventListener('cut', e => {
+e.preventDefault();
+return false;
+}, true);
+document.addEventListener('paste', e => {
+e.preventDefault();
+return false;
+}, true);
+document.addEventListener('dragstart', e => {
+e.preventDefault();
+return false;
+}, true);
+document.addEventListener('drop', e => {
+e.preventDefault();
+return false;
+}, true);
+let devToolsDetected = false;
+const checkDevTools = () => {
+if (devToolsDetected) return;
+const start = performance.now();
+debugger;
+const end = performance.now();
+if (end - start > 100) {
+devToolsDetected = true;
+triggerSecurityBlock();
+}
+};
+setInterval(checkDevTools, 1000);
+setInterval(() => {
+if (devToolsDetected) return;
+if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+devToolsDetected = true;
+triggerSecurityBlock();
+}
+}, 500);
+function triggerSecurityBlock() {
+const block = document.getElementById('securityBlock');
+if (block) {
+block.style.display = 'flex';
+document.body.innerHTML = '';
+document.body.appendChild(block);
+document.body.style.overflow = 'hidden';
+}
+}
 })();
 
 // ============================================
 // 🔐 نظام التشفير المتقدم
 // ============================================
 const CryptoSystem = (function() {
-    const getSessionKey = () => {
-        const stored = sessionStorage.getItem('_sk_v3');
-        if (stored) return stored;
-        const newKey = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Hex);
-        sessionStorage.setItem('_sk_v3', newKey);
-        return newKey;
-    };
-    
-    const IV_SIZE = 16;
-    
-    return {
-        encrypt: function(data) {
-            try {
-                const key = CryptoJS.enc.Hex.parse(getSessionKey().substring(0, 64));
-                const iv = CryptoJS.lib.WordArray.random(IV_SIZE);
-                const encrypted = CryptoJS.AES.encrypt(
-                    JSON.stringify(data),
-                    key,
-                    { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
-                );
-                return iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
-            } catch (e) {
-                return btoa(encodeURIComponent(JSON.stringify(data)));
-            }
-        },
-        
-        decrypt: function(encrypted) {
-            try {
-                if (!encrypted) return null;
-                const parts = encrypted.split(':');
-                if (parts.length !== 2) {
-                    return JSON.parse(decodeURIComponent(atob(encrypted)));
-                }
-                const iv = CryptoJS.enc.Hex.parse(parts[0]);
-                const key = CryptoJS.enc.Hex.parse(getSessionKey().substring(0, 64));
-                const decrypted = CryptoJS.AES.decrypt(parts[1], key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
-                return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-            } catch (e) {
-                return null;
-            }
-        },
-        
-        generateToken: function() {
-            return CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
-        }
-    };
+const getSessionKey = () => {
+let stored = localStorage.getItem('_sk_persistent_v3');
+if (stored) return stored;
+const newKey = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Hex);
+localStorage.setItem('_sk_persistent_v3', newKey);
+return newKey;
+};
+const IV_SIZE = 16;
+return {
+encrypt: function(data) {
+try {
+const key = CryptoJS.enc.Hex.parse(getSessionKey().substring(0, 64));
+const iv = CryptoJS.lib.WordArray.random(IV_SIZE);
+const encrypted = CryptoJS.AES.encrypt(
+JSON.stringify(data),
+key,
+{ iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+);
+return iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
+} catch (e) {
+return btoa(encodeURIComponent(JSON.stringify(data)));
+}
+},
+decrypt: function(encrypted) {
+try {
+if (!encrypted) return null;
+const parts = encrypted.split(':');
+if (parts.length !== 2) {
+return JSON.parse(decodeURIComponent(atob(encrypted)));
+}
+const iv = CryptoJS.enc.Hex.parse(parts[0]);
+const key = CryptoJS.enc.Hex.parse(getSessionKey().substring(0, 64));
+const decrypted = CryptoJS.AES.decrypt(parts[1], key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+} catch (e) {
+return null;
+}
+},
+generateToken: function() {
+return CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+}
+};
 })();
 
 // ============================================
 // 🔑 نظام إدارة المفاتيح السرية
 // ============================================
 const SecureConfig = (function() {
-    const _d = {
-        u: 'aHR0cHM6Ly9zd2VldC1zb3VuZC0zNjhkLmFobWVkcmFnYWI2OTIwLndvcmtlcnMuZGV2Lw==',
-        k: 'c143RyNrOSRwTDJAbU41eFE4IXJUNCZ3WTYqelUx'
-    };
-    
-    return {
-        getUrl: () => atob(_d.u),
-        getKey: () => atob(_d.k)
-    };
+const _d = {
+u: 'aHR0cHM6Ly9zd2VldC1zb3VuZC0zNjhkLmFobWVkcmFnYWI2OTIwLndvcmtlcnMuZGV2Lw==',
+k: 'c143RyNrOSRwTDJAbU41eFE4IXJUNCZ3WTYqelUx'
+};
+return {
+getUrl: () => atob(_d.u),
+getKey: () => atob(_d.k)
+};
 })();
 
 // ============================================
 // ⏱️ نظام Rate Limiting
 // ============================================
 const RateLimiter = (function() {
-    const MAX_REQUESTS = 15;
-    const WINDOW_MS = 60000;
-    const requests = [];
-    
-    return {
-        canProceed: function() {
-            const now = Date.now();
-            while (requests.length > 0 && requests[0] < now - WINDOW_MS) {
-                requests.shift();
-            }
-            if (requests.length >= MAX_REQUESTS) {
-                return false;
-            }
-            requests.push(now);
-            return true;
-        },
-        
-        getWaitTime: function() {
-            if (requests.length === 0) return 0;
-            const oldest = requests[0];
-            const now = Date.now();
-            return Math.max(0, Math.ceil((WINDOW_MS - (now - oldest)) / 1000));
-        }
-    };
+const MAX_REQUESTS = 15;
+const WINDOW_MS = 60000;
+const requests = [];
+return {
+canProceed: function() {
+const now = Date.now();
+while (requests.length > 0 && requests[0] < now - WINDOW_MS) {
+requests.shift();
+}
+if (requests.length >= MAX_REQUESTS) {
+return false;
+}
+requests.push(now);
+return true;
+},
+getWaitTime: function() {
+if (requests.length === 0) return 0;
+const oldest = requests[0];
+const now = Date.now();
+return Math.max(0, Math.ceil((WINDOW_MS - (now - oldest)) / 1000));
+}
+};
 })();
 
 // ============================================
-// 💾 نظام التخزين الآمن
+// 💾 نظام التخزين الآمن - المحادثات تحفظ دائماً
 // ============================================
 const STORAGE_KEYS = {
-    CHATS: 'dreamChats_v4',
-    FAVORITES: 'dreamFavorites_v4',
-    PROFILE: 'userProfile_v4',
-    SESSION: 'dreamSession_v4'
+CHATS: 'dreamChats_permanent_v5',
+FAVORITES: 'dreamFavorites_permanent_v5',
+PROFILE: 'userProfile_permanent_v5'
 };
 
 const SecureStorage = {
-    save: function(key, data) {
-        try {
-            const encrypted = CryptoSystem.encrypt(data);
-            localStorage.setItem(key, encrypted);
-            return true;
-        } catch (e) {
-            return false;
-        }
-    },
-    
-    load: function(key) {
-        try {
-            const encrypted = localStorage.getItem(key);
-            if (!encrypted) return null;
-            return CryptoSystem.decrypt(encrypted);
-        } catch (e) {
-            return null;
-        }
-    },
-    
-    remove: function(key) {
-        try {
-            localStorage.removeItem(key);
-        } catch (e) {}
-    },
-    
-    saveSession: function(data) {
-        try {
-            sessionStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(data));
-        } catch (e) {}
-    },
-    
-    loadSession: function() {
-        try {
-            const data = sessionStorage.getItem(STORAGE_KEYS.SESSION);
-            return data ? JSON.parse(data) : null;
-        } catch (e) {
-            return null;
-        }
-    },
-    
-    clearAll: function() {
-        try {
-            Object.values(STORAGE_KEYS).forEach(key => {
-                localStorage.removeItem(key);
-            });
-            sessionStorage.clear();
-        } catch (e) {}
-    }
+save: function(key, data) {
+try {
+const encrypted = CryptoSystem.encrypt(data);
+localStorage.setItem(key, encrypted);
+return true;
+} catch (e) {
+return false;
+}
+},
+load: function(key) {
+try {
+const encrypted = localStorage.getItem(key);
+if (!encrypted) return null;
+return CryptoSystem.decrypt(encrypted);
+} catch (e) {
+return null;
+}
+},
+remove: function(key) {
+try {
+localStorage.removeItem(key);
+} catch (e) {}
+},
+clearAll: function() {
+try {
+Object.values(STORAGE_KEYS).forEach(key => {
+localStorage.removeItem(key);
+});
+localStorage.removeItem('_sk_persistent_v3');
+} catch (e) {}
+}
 };
 
 // ============================================
 // 🛡️ دوال الأمان
 // ============================================
 function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = String(text);
-    return div.innerHTML;
+if (!text) return '';
+const div = document.createElement('div');
+div.textContent = String(text);
+return div.innerHTML;
 }
-
 function sanitizeInput(text) {
-    if (!text) return '';
-    return text
-        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-        .replace(/javascript:/gi, '')
-        .replace(/on\w+\s*=/gi, '')
-        .replace(/<[^>]*>/g, '')
-        .trim()
-        .substring(0, 2000);
+if (!text) return '';
+return text
+.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+.replace(/javascript:/gi, '')
+.replace(/on\w+\s*=/gi, '')
+.replace(/<[^>]*>/g, '')
+.trim()
+.substring(0, 2000);
 }
-
 function validateInput(text) {
-    if (!text || text.trim().length === 0) return false;
-    if (text.length > 2000) return false;
-    const suspiciousPatterns = [
-        /<script/i,
-        /javascript:/i,
-        /on\w+\s*=/i,
-        /eval\s*\(/i,
-        /document\./i,
-        /window\./i,
-        /localStorage/i,
-        /sessionStorage/i,
-        /cookie/i
-    ];
-    for (const pattern of suspiciousPatterns) {
-        if (pattern.test(text)) return false;
-    }
-    return true;
+if (!text || text.trim().length === 0) return false;
+if (text.length > 2000) return false;
+const suspiciousPatterns = [
+/<script/i,
+/javascript:/i,
+/on\w+\s*=/i,
+/eval\s*\(/i,
+/document\./i,
+/window\./i,
+/localStorage/i,
+/sessionStorage/i,
+/cookie/i
+];
+for (const pattern of suspiciousPatterns) {
+if (pattern.test(text)) return false;
+}
+return true;
 }
 
 // ============================================
@@ -551,614 +499,616 @@ let currentChatId = null;
 let chats = [];
 let favorites = [];
 let userProfile = null;
+let isInitialized = false;
 
 // ============================================
-// 🔄 تهيئة البيانات
+// 🔄 تهيئة البيانات - المحادثات القديمة تحفظ دائماً
 // ============================================
 function initializeData() {
-    const storedChats = SecureStorage.load(STORAGE_KEYS.CHATS);
-    if (storedChats && Array.isArray(storedChats)) {
-        chats = storedChats;
-    }
-    
-    const storedFavorites = SecureStorage.load(STORAGE_KEYS.FAVORITES);
-    if (storedFavorites && Array.isArray(storedFavorites)) {
-        favorites = storedFavorites;
-    }
-    
-    const storedProfile = SecureStorage.load(STORAGE_KEYS.PROFILE);
-    if (storedProfile) {
-        userProfile = storedProfile;
-    }
-    
-    const sessionData = SecureStorage.loadSession();
-    if (sessionData && sessionData.chatId) {
-        const existingChat = chats.find(c => c.id === sessionData.chatId);
-        if (existingChat) {
-            currentChatId = sessionData.chatId;
-        }
-    }
+if (isInitialized) return;
+isInitialized = true;
+
+// تحميل المحادثات المخزنة (تبقى دائماً)
+const storedChats = SecureStorage.load(STORAGE_KEYS.CHATS);
+if (storedChats && Array.isArray(storedChats) && storedChats.length > 0) {
+chats = storedChats;
+}
+
+// تحميل المفضلة
+const storedFavorites = SecureStorage.load(STORAGE_KEYS.FAVORITES);
+if (storedFavorites && Array.isArray(storedFavorites)) {
+favorites = storedFavorites;
+}
+
+// تحميل الملف الشخصي
+const storedProfile = SecureStorage.load(STORAGE_KEYS.PROFILE);
+if (storedProfile) {
+userProfile = storedProfile;
+}
+
+// ⭐ مهم: لا نحمّل آخر محادثة - نبدأ دائماً بمحادثة جديدة
+currentChatId = null;
 }
 
 function saveAllData() {
-    SecureStorage.save(STORAGE_KEYS.CHATS, chats);
-    SecureStorage.save(STORAGE_KEYS.FAVORITES, favorites);
-    if (userProfile) {
-        SecureStorage.save(STORAGE_KEYS.PROFILE, userProfile);
-    }
-    if (currentChatId) {
-        SecureStorage.saveSession({ chatId: currentChatId, timestamp: Date.now() });
-    }
+SecureStorage.save(STORAGE_KEYS.CHATS, chats);
+SecureStorage.save(STORAGE_KEYS.FAVORITES, favorites);
+if (userProfile) {
+SecureStorage.save(STORAGE_KEYS.PROFILE, userProfile);
+}
 }
 
 // ============================================
 // 📝 دوال المحادثة
 // ============================================
 function autoResizeTextarea() {
-    if (!dreamInput) return;
-    dreamInput.style.height = 'auto';
-    const newHeight = Math.min(dreamInput.scrollHeight, 350);
-    dreamInput.style.height = newHeight + 'px';
-    dreamInput.style.overflowY = dreamInput.scrollHeight > 350 ? 'auto' : 'hidden';
+if (!dreamInput) return;
+dreamInput.style.height = 'auto';
+const newHeight = Math.min(dreamInput.scrollHeight, 350);
+dreamInput.style.height = newHeight + 'px';
+dreamInput.style.overflowY = dreamInput.scrollHeight > 350 ? 'auto' : 'hidden';
 }
 
 function toggleSidebar() {
-    if (!sidebar) return;
-    sidebar.classList.toggle('open');
-    if (sidebar.classList.contains('open')) {
-        renderChatList();
-    }
+if (!sidebar) return;
+sidebar.classList.toggle('open');
+if (sidebar.classList.contains('open')) {
+renderChatList();
+}
 }
 
 function renderChatList() {
-    if (!chatList) return;
-    
-    if (!chats || chats.length === 0) {
-        chatList.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';
-        return;
-    }
-    
-    chatList.innerHTML = chats.map(chat => {
-        const title = escapeHtml(chat.title || 'محادثة جديدة');
-        const preview = escapeHtml(chat.messages[0]?.text || 'لا توجد رسائل');
-        const isActive = chat.id === currentChatId ? 'active' : '';
-        const isFav = favorites.includes(chat.id) ? 'active' : '';
-        const date = new Date(chat.date).toLocaleDateString('ar-EG');
-        
-        return `
-        <div class="chat-item ${isActive}" data-chat-id="${escapeHtml(chat.id)}">
-            <div class="chat-item-content">
-                <div class="chat-item-header">
-                    <div class="chat-item-title">${title}</div>
-                    <i class="fas fa-star chat-item-favorite ${isFav}" data-chat-id="${escapeHtml(chat.id)}"></i>
-                </div>
-                <div class="chat-item-preview">${preview}</div>
-                <div class="chat-item-footer">
-                    <div class="chat-item-date">${date}</div>
-                    <button class="chat-item-delete" data-chat-id="${escapeHtml(chat.id)}"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-        </div>
-        `;
-    }).join('');
-    
-    // إضافة مستمعي الأحداث مباشرة
-    attachChatListEvents();
+if (!chatList) return;
+
+if (!chats || chats.length === 0) {
+chatList.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';
+return;
+}
+
+let html = '';
+chats.forEach(chat => {
+const title = escapeHtml(chat.title || 'محادثة جديدة');
+const preview = escapeHtml(chat.messages[0]?.text || 'لا توجد رسائل');
+const isActive = chat.id === currentChatId ? 'active' : '';
+const isFav = favorites.includes(chat.id) ? 'active' : '';
+const date = new Date(chat.date).toLocaleDateString('ar-EG');
+
+html += `
+<div class="chat-item ${isActive}" data-chat-id="${escapeHtml(chat.id)}">
+<div class="chat-item-content">
+<div class="chat-item-header">
+<div class="chat-item-title">${title}</div>
+<i class="fas fa-star chat-item-favorite ${isFav}" data-chat-id="${escapeHtml(chat.id)}"></i>
+</div>
+<div class="chat-item-preview">${preview}</div>
+<div class="chat-item-footer">
+<div class="chat-item-date">${date}</div>
+<button class="chat-item-delete" data-chat-id="${escapeHtml(chat.id)}"><i class="fas fa-trash"></i></button>
+</div>
+</div>
+</div>
+`;
+});
+
+chatList.innerHTML = html;
+
+setTimeout(() => {
+attachChatListEvents();
+}, 100);
 }
 
 function attachChatListEvents() {
-    document.querySelectorAll('.chat-item').forEach(item => {
-        item.removeEventListener('click', chatItemClickHandler);
-        item.addEventListener('click', chatItemClickHandler);
-    });
-    
-    document.querySelectorAll('.chat-item-favorite').forEach(btn => {
-        btn.removeEventListener('click', favoriteClickHandler);
-        btn.addEventListener('click', favoriteClickHandler);
-    });
-    
-    document.querySelectorAll('.chat-item-delete').forEach(btn => {
-        btn.removeEventListener('click', deleteClickHandler);
-        btn.addEventListener('click', deleteClickHandler);
-    });
+document.querySelectorAll('.chat-item').forEach(item => {
+item.removeEventListener('click', chatItemClickHandler);
+item.addEventListener('click', chatItemClickHandler);
+});
+document.querySelectorAll('.chat-item-favorite').forEach(btn => {
+btn.removeEventListener('click', favoriteClickHandler);
+btn.addEventListener('click', favoriteClickHandler);
+});
+document.querySelectorAll('.chat-item-delete').forEach(btn => {
+btn.removeEventListener('click', deleteClickHandler);
+btn.addEventListener('click', deleteClickHandler);
+});
 }
 
 function chatItemClickHandler(e) {
-    if (e.target.closest('.chat-item-delete') || e.target.closest('.chat-item-favorite')) return;
-    const chatId = this.getAttribute('data-chat-id');
-    if (chatId) loadChat(chatId);
+if (e.target.closest('.chat-item-delete') || e.target.closest('.chat-item-favorite')) return;
+const chatId = this.getAttribute('data-chat-id');
+if (chatId) loadChat(chatId);
 }
 
 function favoriteClickHandler(e) {
-    e.stopPropagation();
-    const chatId = this.getAttribute('data-chat-id');
-    if (chatId) toggleFavorite(chatId);
+e.stopPropagation();
+const chatId = this.getAttribute('data-chat-id');
+if (chatId) toggleFavorite(chatId);
 }
 
 function deleteClickHandler(e) {
-    e.stopPropagation();
-    const chatId = this.getAttribute('data-chat-id');
-    if (chatId) deleteChat(chatId);
+e.stopPropagation();
+const chatId = this.getAttribute('data-chat-id');
+if (chatId) deleteChat(chatId);
 }
 
 function getWelcomeMessage() {
-    const namePart = userProfile && userProfile.name ? ` ${userProfile.name}` : '';
-    return `👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`;
+const namePart = userProfile && userProfile.name ? ` ${userProfile.name}` : '';
+return `👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`;
 }
 
 function updateWelcomeInCurrentChat() {
-    if (!chatContainer) return;
-    const firstBot = chatContainer.querySelector('.bot-message');
-    if (firstBot && chatContainer.children.length <= 1) {
-        firstBot.textContent = getWelcomeMessage();
-    }
+if (!chatContainer) return;
+const firstBot = chatContainer.querySelector('.bot-message');
+if (firstBot && chatContainer.children.length <= 1) {
+firstBot.textContent = getWelcomeMessage();
+}
 }
 
+// ⭐ دالة إنشاء محادثة جديدة - تبدأ دائماً بمحادثة جديدة
 function newChat() {
-    const chatId = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
-    const newChat = {
-        id: chatId,
-        title: 'محادثة جديدة',
-        messages: [],
-        date: new Date().toISOString()
-    };
-    chats.unshift(newChat);
-    currentChatId = chatId;
-    saveAllData();
-    
-    if (chatContainer) {
-        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
-    }
-    
-    renderChatList();
-    if (window.innerWidth <= 768) toggleSidebar();
+const chatId = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+const newChat = {
+id: chatId,
+title: 'محادثة جديدة',
+messages: [],
+date: new Date().toISOString()
+};
+chats.unshift(newChat);
+currentChatId = chatId;
+saveAllData();
+
+if (chatContainer) {
+chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+}
+
+renderChatList();
+if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+toggleSidebar();
+}
 }
 
 function loadChat(chatId) {
-    currentChatId = chatId;
-    const chat = chats.find(c => c.id === chatId);
-    if (!chat || !chatContainer) return;
-    
-    saveAllData();
-    
-    if (chat.messages.length === 0) {
-        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
-    } else {
-        chatContainer.innerHTML = chat.messages.map(msg => {
-            const msgClass = msg.type === 'user' ? 'user-message' : 'bot-message';
-            const msgText = escapeHtml(msg.text);
-            return `<div class="message-group"><div class="${msgClass}">${msgText}</div></div>`;
-        }).join('');
-    }
-    
-    scrollToBottom(false);
-    renderChatList();
-    if (window.innerWidth <= 768) toggleSidebar();
+if (!chatId) return;
+
+currentChatId = chatId;
+const chat = chats.find(c => c.id === chatId);
+
+if (!chat || !chatContainer) return;
+
+saveAllData();
+
+if (chat.messages.length === 0) {
+chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+} else {
+chatContainer.innerHTML = chat.messages.map(msg => {
+const msgClass = msg.type === 'user' ? 'user-message' : 'bot-message';
+const msgText = escapeHtml(msg.text);
+return `<div class="message-group"><div class="${msgClass}">${msgText}</div></div>`;
+}).join('');
+}
+
+scrollToBottom(false);
+renderChatList();
+
+if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+toggleSidebar();
+}
 }
 
 function toggleFavorite(chatId) {
-    const index = favorites.indexOf(chatId);
-    if (index > -1) {
-        favorites.splice(index, 1);
-    } else {
-        favorites.push(chatId);
-    }
-    saveAllData();
-    renderChatList();
+const index = favorites.indexOf(chatId);
+if (index > -1) {
+favorites.splice(index, 1);
+} else {
+favorites.push(chatId);
+}
+saveAllData();
+renderChatList();
 }
 
 function deleteChat(chatId) {
-    if (!confirm('هل أنت متأكد من حذف هذه المحادثة؟')) return;
-    chats = chats.filter(c => c.id !== chatId);
-    favorites = favorites.filter(f => f !== chatId);
-    
-    if (currentChatId === chatId) {
-        currentChatId = null;
-        sessionStorage.removeItem(STORAGE_KEYS.SESSION);
-        if (chatContainer) {
-            chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
-        }
-    }
-    
-    saveAllData();
-    renderChatList();
+if (!confirm('هل أنت متأكد من حذف هذه المحادثة؟')) return;
+
+chats = chats.filter(c => c.id !== chatId);
+favorites = favorites.filter(f => f !== chatId);
+
+if (currentChatId === chatId) {
+if (chats.length > 0) {
+currentChatId = chats[0].id;
+loadChat(currentChatId);
+} else {
+currentChatId = null;
+if (chatContainer) {
+chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+}
+}
+}
+
+saveAllData();
+renderChatList();
 }
 
 function deleteAllChats() {
-    if (!confirm('هل أنت متأكد من حذف جميع المحادثات؟')) return;
-    chats = [];
-    favorites = [];
-    currentChatId = null;
-    sessionStorage.removeItem(STORAGE_KEYS.SESSION);
-    saveAllData();
-    
-    if (chatContainer) {
-        chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
-    }
-    renderChatList();
+if (!confirm('هل أنت متأكد من حذف جميع المحادثات؟')) return;
+
+chats = [];
+favorites = [];
+currentChatId = null;
+
+saveAllData();
+
+if (chatContainer) {
+chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${escapeHtml(getWelcomeMessage())}</div></div>`;
+}
+
+renderChatList();
 }
 
 function scrollToBottom(smooth = true) {
-    if (!chatContainer) return;
-    setTimeout(() => {
-        chatContainer.scrollTo({
-            top: chatContainer.scrollHeight,
-            behavior: smooth ? 'smooth' : 'auto'
-        });
-    }, 10);
+if (!chatContainer) return;
+setTimeout(() => {
+chatContainer.scrollTo({
+top: chatContainer.scrollHeight,
+behavior: smooth ? 'smooth' : 'auto'
+});
+}, 10);
 }
 
 function useHint(text) {
-    if (isGenerating || !dreamInput) return;
-    dreamInput.value = sanitizeInput(text);
-    autoResizeTextarea();
-    dreamInput.focus();
+if (isGenerating || !dreamInput) return;
+dreamInput.value = sanitizeInput(text);
+autoResizeTextarea();
+dreamInput.focus();
 }
 
 function updateUIState(generating) {
-    isGenerating = generating;
-    if (sendBtn) {
-        sendBtn.disabled = generating;
-        sendBtn.innerHTML = generating ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
-    }
-    if (hints) {
-        hints.forEach(h => h.classList.toggle('disabled-hint', generating));
-    }
+isGenerating = generating;
+if (sendBtn) {
+sendBtn.disabled = generating;
+sendBtn.innerHTML = generating ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
+}
+if (hints) {
+hints.forEach(h => h.classList.toggle('disabled-hint', generating));
+}
 }
 
 function addMessageGroup(userText) {
-    if (!chatContainer) return null;
-    const group = document.createElement('div');
-    group.className = 'message-group';
-    
-    const userDiv = document.createElement('div');
-    userDiv.className = 'user-message';
-    userDiv.textContent = userText;
-    
-    const botDiv = document.createElement('div');
-    botDiv.className = 'bot-message';
-    
-    group.append(userDiv, botDiv);
-    chatContainer.appendChild(group);
-    return botDiv;
+if (!chatContainer) return null;
+
+const group = document.createElement('div');
+group.className = 'message-group';
+
+const userDiv = document.createElement('div');
+userDiv.className = 'user-message';
+userDiv.textContent = userText;
+
+const botDiv = document.createElement('div');
+botDiv.className = 'bot-message';
+
+group.append(userDiv, botDiv);
+chatContainer.appendChild(group);
+
+return botDiv;
 }
 
 function showTypingIndicator() {
-    if (!chatContainer) return;
-    const ind = document.createElement('div');
-    ind.className = 'message-group';
-    ind.id = 'typingIndicator';
-    ind.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
-    chatContainer.appendChild(ind);
-    scrollToBottom(true);
+if (!chatContainer) return;
+
+const ind = document.createElement('div');
+ind.className = 'message-group';
+ind.id = 'typingIndicator';
+ind.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+chatContainer.appendChild(ind);
+scrollToBottom(true);
 }
 
 function hideTypingIndicator() {
-    const ind = document.getElementById('typingIndicator');
-    if (ind) ind.remove();
+const ind = document.getElementById('typingIndicator');
+if (ind) ind.remove();
 }
 
 async function typeMessage(element, text, speed = 15) {
-    if (!element) return;
-    element.innerHTML = '';
-    for (let i = 0; i < text.length; i++) {
-        element.innerHTML += text[i];
-        if (i % 3 === 0) scrollToBottom(true);
-        await new Promise(r => setTimeout(r, speed));
-    }
-    scrollToBottom(true);
+if (!element) return;
+element.innerHTML = '';
+for (let i = 0; i < text.length; i++) {
+element.innerHTML += text[i];
+if (i % 3 === 0) scrollToBottom(true);
+await new Promise(r => setTimeout(r, speed));
+}
+scrollToBottom(true);
 }
 
 // ============================================
 // 🌐 معالجة الرسائل
 // ============================================
 async function processMessage(messageText) {
-    // التحقق من صحة المدخلات
-    if (!validateInput(messageText)) {
-        hideTypingIndicator();
-        const botElement = addMessageGroup(messageText);
-        await typeMessage(botElement, '⚠️ يرجى كتابة حلمك بشكل صحيح دون رموز خاصة', 15);
-        return;
-    }
-    
-    // التحقق من Rate Limiting
-    if (!RateLimiter.canProceed()) {
-        const waitTime = RateLimiter.getWaitTime();
-        hideTypingIndicator();
-        const botElement = addMessageGroup(messageText);
-        await typeMessage(botElement, `⏳ يرجى الانتظار ${waitTime} ثانية قبل إرسال رسالة جديدة`, 15);
-        return;
-    }
-    
-    showTypingIndicator();
-    
-    try {
-        const requestBody = {
-            dream: messageText,
-            userName: userProfile?.name || 'زائر',
-            birthDate: userProfile?.birthDate || 'غير محدد',
-            token: CryptoSystem.generateToken(),
-            timestamp: Date.now()
-        };
-        
-        const workerUrl = SecureConfig.getUrl();
-        const secretKey = SecureConfig.getKey();
-        
-        const response = await fetch(workerUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Secret-Key': secretKey
-            },
-            body: JSON.stringify(requestBody)
-        });
-        
-        const responseText = await response.text();
-        hideTypingIndicator();
-        
-        if (!response.ok) {
-            throw new Error('حدث خطأ في الاتصال');
-        }
-        
-        let interpretation = responseText;
-        if (responseText.trim().startsWith('{') || responseText.trim().startsWith('[')) {
-            try {
-                const data = JSON.parse(responseText);
-                interpretation = data.interpretation || data.message || data.text || data.reply || data.response || JSON.stringify(data);
-            } catch (e) {}
-        }
-        
-        const botElement = addMessageGroup(messageText);
-        await typeMessage(botElement, interpretation, 15);
-        
-        if (!currentChatId) {
-            currentChatId = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
-            chats.unshift({
-                id: currentChatId,
-                title: messageText.substring(0, 30) + '...',
-                messages: [],
-                date: new Date().toISOString()
-            });
-        }
-        
-        const chat = chats.find(c => c.id === currentChatId);
-        if (chat) {
-            chat.messages.push({ type: 'user', text: messageText });
-            chat.messages.push({ type: 'bot', text: interpretation });
-            if (!chat.title || chat.title === 'محادثة جديدة') {
-                chat.title = messageText.substring(0, 30) + '...';
-            }
-            chat.date = new Date().toISOString();
-            saveAllData();
-        }
-        
-    } catch (error) {
-        hideTypingIndicator();
-        const errorMessage = '❌ عذراً، حدث خطأ في الاتصال. الرجاء المحاولة مرة أخرى.';
-        const botElement = addMessageGroup(messageText);
-        await typeMessage(botElement, errorMessage, 15);
-    }
+if (!validateInput(messageText)) {
+hideTypingIndicator();
+const botElement = addMessageGroup(messageText);
+await typeMessage(botElement, '⚠️ يرجى كتابة حلمك بشكل صحيح دون رموز خاصة', 15);
+return;
+}
+
+if (!RateLimiter.canProceed()) {
+const waitTime = RateLimiter.getWaitTime();
+hideTypingIndicator();
+const botElement = addMessageGroup(messageText);
+await typeMessage(botElement, `⏳ يرجى الانتظار ${waitTime} ثانية قبل إرسال رسالة جديدة`, 15);
+return;
+}
+
+showTypingIndicator();
+
+try {
+const requestBody = {
+dream: messageText,
+userName: userProfile?.name || 'زائر',
+birthDate: userProfile?.birthDate || 'غير محدد',
+token: CryptoSystem.generateToken(),
+timestamp: Date.now()
+};
+
+const workerUrl = SecureConfig.getUrl();
+const secretKey = SecureConfig.getKey();
+
+const response = await fetch(workerUrl, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Secret-Key': secretKey
+},
+body: JSON.stringify(requestBody)
+});
+
+const responseText = await response.text();
+hideTypingIndicator();
+
+if (!response.ok) {
+throw new Error('حدث خطأ في الاتصال');
+}
+
+let interpretation = responseText;
+if (responseText.trim().startsWith('{') || responseText.trim().startsWith('[')) {
+try {
+const data = JSON.parse(responseText);
+interpretation = data.interpretation || data.message || data.text || data.reply || data.response || JSON.stringify(data);
+} catch (e) {}
+}
+
+const botElement = addMessageGroup(messageText);
+await typeMessage(botElement, interpretation, 15);
+
+// إنشاء محادثة جديدة إذا لم تكن موجودة
+if (!currentChatId) {
+currentChatId = 'chat-' + Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+chats.unshift({
+id: currentChatId,
+title: messageText.substring(0, 30) + '...',
+messages: [],
+date: new Date().toISOString()
+});
+}
+
+const chat = chats.find(c => c.id === currentChatId);
+if (chat) {
+chat.messages.push({ type: 'user', text: messageText });
+chat.messages.push({ type: 'bot', text: interpretation });
+if (!chat.title || chat.title === 'محادثة جديدة') {
+chat.title = messageText.substring(0, 30) + '...';
+}
+chat.date = new Date().toISOString();
+saveAllData();
+}
+
+renderChatList();
+
+} catch (error) {
+hideTypingIndicator();
+const errorMessage = '❌ عذراً، حدث خطأ في الاتصال. الرجاء المحاولة مرة أخرى.';
+const botElement = addMessageGroup(messageText);
+await typeMessage(botElement, errorMessage, 15);
+}
 }
 
 async function handleSend() {
-    if (isGenerating || !dreamInput) return;
-    const dreamText = sanitizeInput(dreamInput.value.trim());
-    if (!dreamText) {
-        alert('اكتب حلمك أولاً');
-        return;
-    }
-    
-    updateUIState(true);
-    dreamInput.value = '';
-    autoResizeTextarea();
-    await processMessage(dreamText);
-    updateUIState(false);
-    dreamInput.focus();
-    renderChatList();
+if (isGenerating || !dreamInput) return;
+
+const dreamText = sanitizeInput(dreamInput.value.trim());
+if (!dreamText) {
+alert('اكتب حلمك أولاً');
+return;
+}
+
+updateUIState(true);
+dreamInput.value = '';
+autoResizeTextarea();
+
+await processMessage(dreamText);
+
+updateUIState(false);
+dreamInput.focus();
 }
 
 // ============================================
 // 👤 دوال الملف الشخصي
 // ============================================
 function populateDOBSelects() {
-    const daySel = document.getElementById('birthDay');
-    const monthSel = document.getElementById('birthMonth');
-    const yearSel = document.getElementById('birthYear');
-    
-    if (!daySel || !monthSel || !yearSel) return;
-    
-    daySel.innerHTML = '<option value="">اليوم</option>';
-    for (let d = 1; d <= 31; d++) {
-        const opt = document.createElement('option');
-        opt.value = d;
-        opt.textContent = d;
-        daySel.appendChild(opt);
-    }
-    
-    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-    monthSel.innerHTML = '<option value="">الشهر</option>';
-    for (let m = 0; m < 12; m++) {
-        const opt = document.createElement('option');
-        opt.value = m + 1;
-        opt.textContent = months[m];
-        monthSel.appendChild(opt);
-    }
-    
-    const currentYear = new Date().getFullYear();
-    yearSel.innerHTML = '<option value="">السنة</option>';
-    for (let y = currentYear; y >= 1940; y--) {
-        const opt = document.createElement('option');
-        opt.value = y;
-        opt.textContent = y;
-        yearSel.appendChild(opt);
-    }
+const daySel = document.getElementById('birthDay');
+const monthSel = document.getElementById('birthMonth');
+const yearSel = document.getElementById('birthYear');
+
+if (!daySel || !monthSel || !yearSel) return;
+
+daySel.innerHTML = '<option value="">اليوم</option>';
+for (let d = 1; d <= 31; d++) {
+const opt = document.createElement('option');
+opt.value = d;
+opt.textContent = d;
+daySel.appendChild(opt);
+}
+
+const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+monthSel.innerHTML = '<option value="">الشهر</option>';
+for (let m = 0; m < 12; m++) {
+const opt = document.createElement('option');
+opt.value = m + 1;
+opt.textContent = months[m];
+monthSel.appendChild(opt);
+}
+
+const currentYear = new Date().getFullYear();
+yearSel.innerHTML = '<option value="">السنة</option>';
+for (let y = currentYear; y >= 1940; y--) {
+const opt = document.createElement('option');
+opt.value = y;
+opt.textContent = y;
+yearSel.appendChild(opt);
+}
 }
 
 function openProfile() {
-    const modal = document.getElementById('profileModal');
-    if (!modal) return;
-    
-    if (!userProfile) {
-        document.getElementById('profileView').style.display = 'none';
-        document.getElementById('profileEdit').style.display = 'block';
-        document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
-        document.getElementById('userName').value = '';
-        document.getElementById('birthDay').value = '';
-        document.getElementById('birthMonth').value = '';
-        document.getElementById('birthYear').value = '';
-    } else {
-        document.getElementById('profileView').style.display = 'block';
-        document.getElementById('profileEdit').style.display = 'none';
-        document.getElementById('displayName').textContent = escapeHtml(userProfile.name);
-        document.getElementById('displayBirth').textContent = escapeHtml(userProfile.birthDate);
-    }
-    modal.style.display = 'flex';
+const modal = document.getElementById('profileModal');
+if (!modal) return;
+
+if (!userProfile) {
+document.getElementById('profileView').style.display = 'none';
+document.getElementById('profileEdit').style.display = 'block';
+document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
+document.getElementById('userName').value = '';
+document.getElementById('birthDay').value = '';
+document.getElementById('birthMonth').value = '';
+document.getElementById('birthYear').value = '';
+} else {
+document.getElementById('profileView').style.display = 'block';
+document.getElementById('profileEdit').style.display = 'none';
+document.getElementById('displayName').textContent = escapeHtml(userProfile.name);
+document.getElementById('displayBirth').textContent = escapeHtml(userProfile.birthDate);
+}
+
+modal.style.display = 'flex';
 }
 
 function switchToEditMode() {
-    document.getElementById('profileView').style.display = 'none';
-    document.getElementById('profileEdit').style.display = 'block';
-    document.getElementById('modalTitleEdit').textContent = 'تعديل البيانات';
-    if (userProfile) {
-        document.getElementById('userName').value = userProfile.name || '';
-        if (userProfile.birthDate) {
-            const [d, m, y] = userProfile.birthDate.split('/');
-            document.getElementById('birthDay').value = d || '';
-            document.getElementById('birthMonth').value = m || '';
-            document.getElementById('birthYear').value = y || '';
-        }
-    }
+document.getElementById('profileView').style.display = 'none';
+document.getElementById('profileEdit').style.display = 'block';
+document.getElementById('modalTitleEdit').textContent = 'تعديل البيانات';
+
+if (userProfile) {
+document.getElementById('userName').value = userProfile.name || '';
+if (userProfile.birthDate) {
+const [d, m, y] = userProfile.birthDate.split('/');
+document.getElementById('birthDay').value = d || '';
+document.getElementById('birthMonth').value = m || '';
+document.getElementById('birthYear').value = y || '';
+}
+}
 }
 
 function saveProfile() {
-    const name = sanitizeInput(document.getElementById('userName').value.trim());
-    const day = document.getElementById('birthDay').value;
-    const month = document.getElementById('birthMonth').value;
-    const year = document.getElementById('birthYear').value;
-    
-    if (!name) {
-        alert('يرجى إدخال اسمك الكامل');
-        return;
-    }
-    if (!day || !month || !year) {
-        alert('يرجى اختيار تاريخ الميلاد كاملاً');
-        return;
-    }
-    
-    userProfile = { name, birthDate: `${day}/${month}/${year}` };
-    SecureStorage.save(STORAGE_KEYS.PROFILE, userProfile);
-    saveAllData();
-    document.getElementById('profileModal').style.display = 'none';
-    updateWelcomeInCurrentChat();
-    alert('✅ تم حفظ بياناتك بنجاح!');
+const name = sanitizeInput(document.getElementById('userName').value.trim());
+const day = document.getElementById('birthDay').value;
+const month = document.getElementById('birthMonth').value;
+const year = document.getElementById('birthYear').value;
+
+if (!name) {
+alert('يرجى إدخال اسمك الكامل');
+return;
+}
+
+if (!day || !month || !year) {
+alert('يرجى اختيار تاريخ الميلاد كاملاً');
+return;
+}
+
+userProfile = { name, birthDate: `${day}/${month}/${year}` };
+SecureStorage.save(STORAGE_KEYS.PROFILE, userProfile);
+saveAllData();
+
+document.getElementById('profileModal').style.display = 'none';
+updateWelcomeInCurrentChat();
+alert('✅ تم حفظ بياناتك بنجاح!');
 }
 
 function performLogout() {
-    if (!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.')) return;
-    
-    SecureStorage.clearAll();
-    
-    userProfile = null;
-    chats = [];
-    favorites = [];
-    currentChatId = null;
-    
-    document.getElementById('profileModal').style.display = 'none';
-    updateWelcomeInCurrentChat();
-    
-    setTimeout(() => {
-        const modal = document.getElementById('profileModal');
-        document.getElementById('profileView').style.display = 'none';
-        document.getElementById('profileEdit').style.display = 'block';
-        document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
-        document.getElementById('userName').value = '';
-        document.getElementById('birthDay').value = '';
-        document.getElementById('birthMonth').value = '';
-        document.getElementById('birthYear').value = '';
-        modal.style.display = 'flex';
-    }, 400);
+if (!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.')) return;
+
+SecureStorage.clearAll();
+userProfile = null;
+chats = [];
+favorites = [];
+currentChatId = null;
+
+document.getElementById('profileModal').style.display = 'none';
+updateWelcomeInCurrentChat();
+
+setTimeout(() => {
+const modal = document.getElementById('profileModal');
+document.getElementById('profileView').style.display = 'none';
+document.getElementById('profileEdit').style.display = 'block';
+document.getElementById('modalTitleEdit').textContent = 'مرحباً! سجل بياناتك للبدء';
+document.getElementById('userName').value = '';
+document.getElementById('birthDay').value = '';
+document.getElementById('birthMonth').value = '';
+document.getElementById('birthYear').value = '';
+modal.style.display = 'flex';
+}, 400);
 }
 
 function closeProfileModal() {
-    document.getElementById('profileModal').style.display = 'none';
+document.getElementById('profileModal').style.display = 'none';
 }
 
 // ============================================
-// 🚀 التهيئة عند التحميل
+// 🚀 التهيئة عند التحميل - يبدأ دائماً بمحادثة جديدة
 // ============================================
 window.addEventListener('load', () => {
-    dreamInput = document.getElementById('dreamInput');
-    chatContainer = document.getElementById('chatContainer');
-    sendBtn = document.getElementById('sendBtn');
-    hints = document.querySelectorAll('.hint');
-    sidebar = document.getElementById('sidebar');
-    chatList = document.getElementById('chatList');
-    
-    initializeData();
-    populateDOBSelects();
-    autoResizeTextarea();
-    
-    // تحميل المحادثة المناسبة
-    if (chats && chats.length > 0) {
-        if (currentChatId) {
-            loadChat(currentChatId);
-        } else {
-            // تحميل آخر محادثة
-            currentChatId = chats[0].id;
-            loadChat(currentChatId);
-        }
-    } else {
-        newChat();
-    }
-    
-    renderChatList();
-    
-    if (userProfile) {
-        updateWelcomeInCurrentChat();
-    }
-    
-    scrollToBottom(false);
+dreamInput = document.getElementById('dreamInput');
+chatContainer = document.getElementById('chatContainer');
+sendBtn = document.getElementById('sendBtn');
+hints = document.querySelectorAll('.hint');
+sidebar = document.getElementById('sidebar');
+chatList = document.getElementById('chatList');
+
+// تهيئة البيانات (المحادثات القديمة تحفظ)
+initializeData();
+populateDOBSelects();
+autoResizeTextarea();
+
+// ⭐ مهم: نبدأ دائماً بمحادثة جديدة عند فتح الموقع
+// المحادثات القديمة تبقى في الشريط الجانبي ويمكن الوصول إليها
+newChat();
+
+// عرض قائمة المحادثات (تشمل القديمة)
+renderChatList();
+
+if (userProfile) {
+updateWelcomeInCurrentChat();
+}
+
+scrollToBottom(false);
+
+// إضافة مستمعي الأحداث
+if (sendBtn) {
+sendBtn.addEventListener('click', handleSend);
+}
+
+if (dreamInput) {
+dreamInput.addEventListener('input', autoResizeTextarea);
+dreamInput.addEventListener('keydown', (e) => {
+if (e.key === 'Enter' && !e.shiftKey) {
+e.preventDefault();
+handleSend();
+}
+});
+}
 });
 
 // ============================================
-// 📌 مستمعي الأحداث
+// 📌 حفظ عند إغلاق الصفحة
 // ============================================
 window.addEventListener('beforeunload', () => {
-    saveAllData();
+saveAllData();
 });
-
-// تأكد من وجود مستمعي الأحداث
-document.addEventListener('DOMContentLoaded', () => {
-    if (sendBtn) {
-        sendBtn.addEventListener('click', handleSend);
-    }
-    
-    if (dreamInput) {
-        dreamInput.addEventListener('input', autoResizeTextarea);
-        dreamInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-            }
-        });
-    }
-});
-
-// مستمعي الأحداث الاحتياطية
-setTimeout(() => {
-    if (sendBtn) {
-        sendBtn.addEventListener('click', handleSend);
-    }
-    
-    if (dreamInput) {
-        dreamInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-            }
-        });
-    }
-}, 500);
 </script>
 </body>
-</html> 
+</html>
+
