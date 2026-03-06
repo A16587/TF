@@ -9,23 +9,6 @@
 <link href="https://cdn.jsdelivr.net/npm/fontsource-cairo@latest/index.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
-/* حماية المحتوى من التحديد والنسخ */
-* {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-}
-
-/* السماح بالتحديد فقط داخل حقول الإدخال */
-input, textarea {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-}
-
 *{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.3) transparent}
 *::-webkit-scrollbar{width:6px;height:6px}
 *::-webkit-scrollbar-track{background:transparent}
@@ -212,62 +195,10 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 </div>
 </div>
-
 <script>
-// ================== نظام الحماية المتقدم ==================
-(function() {
-    // 1. منع الزر الأيمن
-    document.addEventListener('contextmenu', event => {
-        event.preventDefault();
-        return false;
-    });
-
-    // 2. منع مفاتيح المطورين (F12, Ctrl+Shift+I, Ctrl+U, etc.)
-    document.addEventListener('keydown', function(e) {
-        // F12
-        if (e.keyCode == 123) {
-            e.preventDefault();
-            return false;
-        }
-        // Ctrl+Shift+I/J/C
-        if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) {
-            e.preventDefault();
-            return false;
-        }
-        // Ctrl+U (View Source)
-        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-            e.preventDefault();
-            return false;
-        }
-        // Ctrl+S (Save Page)
-        if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    // 3. فخ الديباغر (يجمد المتصفح إذا تم فتح الكونسول)
-    setInterval(() => {
-        const start = performance.now();
-        debugger; // هذه النقطة ستوقف التنفيذ إذا كانت أدوات المطور مفتوحة
-        const end = performance.now();
-        if (end - start > 100) {
-            // إذا توقف التنفيذ لأكثر من 100ms، فهذا يعني أن المستخدم فتح الكونسول
-            document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;color:#ffd700;font-size:24px;font-family:Cairo;"><i class="fas fa-lock"></i> تم اكتشاف محاولة اختراق النظام. تم إغلاق الصفحة.</div>';
-            throw new Error('Security Violation');
-        }
-    }, 1000);
-
-    // 4. منع تحديد النص
-    document.onselectstart = function() { return false; };
-    document.onmousedown = function() { return false; };
-})();
-// =======================================================
-
 // ================== إعدادات التشفير ==================
 const ENCRYPTION_KEY = 'EncryptionKey2024Secure';
 const SECURE_KEY = 'SecureKey2024Secure';
-
 function encryptData(data) {
     try {
         return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
@@ -275,7 +206,6 @@ function encryptData(data) {
         return btoa(encodeURIComponent(JSON.stringify(data)));
     }
 }
-
 function decryptData(encrypted) {
     try {
         const bytes = CryptoJS.AES.decrypt(encrypted, ENCRYPTION_KEY);
@@ -288,7 +218,6 @@ function decryptData(encrypted) {
         }
     }
 }
-
 function secureStorage(key, data) {
     try {
         localStorage.setItem(key, encryptData(data));
@@ -297,7 +226,6 @@ function secureStorage(key, data) {
         return false;
     }
 }
-
 function secureRetrieve(key) {
     try {
         const encrypted = localStorage.getItem(key);
@@ -307,11 +235,9 @@ function secureRetrieve(key) {
         return null;
     }
 }
-
-// ================== الإعدادات الأساسية (مخفية تماماً) ==================
+// ================== الإعدادات الأساسية ==================
 const WORKER_URL = 'https://sweet-sound-368d.ahmedragab6920.workers.dev/';
 const SECRET_KEY = 's^7G#k9$pL2@mN5xQ8!rT4&wY6*zU1';
-
 // ================== المتغيرات الرئيسية ==================
 const dreamInput = document.getElementById('dreamInput');
 const chatContainer = document.getElementById('chatContainer');
@@ -324,7 +250,6 @@ let currentChatId = null;
 let chats = secureRetrieve('dreamChats') || [];
 let favorites = secureRetrieve('dreamFavorites') || [];
 let userProfile = secureRetrieve('userProfile') || null;
-
 // ================== دوال مساعدة ==================
 function autoResizeTextarea() {
     dreamInput.style.height = 'auto';
@@ -333,18 +258,15 @@ function autoResizeTextarea() {
     dreamInput.style.overflowY = dreamInput.scrollHeight > 350 ? 'auto' : 'hidden';
 }
 dreamInput.addEventListener('input', autoResizeTextarea);
-
 function saveData() {
     secureStorage('dreamChats', chats);
     secureStorage('dreamFavorites', favorites);
     if (userProfile) secureStorage('userProfile', userProfile);
 }
-
 function toggleSidebar() {
     sidebar.classList.toggle('open');
     if (sidebar.classList.contains('open')) renderChatList();
 }
-
 function renderChatList() {
     if (chats.length === 0) {
         chatList.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد محادثات</p></div>';
@@ -366,17 +288,14 @@ function renderChatList() {
         </div>
     `).join('');
 }
-
 function getWelcomeMessage() {
     const namePart = userProfile && userProfile.name ? ` ${userProfile.name}` : '';
     return `👋 مرحباً${namePart}! اكتب حلمك وسأقوم بتفسيره لك`;
 }
-
 function updateWelcomeInCurrentChat() {
     const firstBot = chatContainer.querySelector('.bot-message');
     if (firstBot) firstBot.textContent = getWelcomeMessage();
 }
-
 function newChat() {
     const chatId = 'chat-' + Date.now();
     chats.unshift({ id: chatId, title: 'محادثة جديدة', messages: [], date: new Date().toISOString() });
@@ -386,7 +305,6 @@ function newChat() {
     renderChatList();
     if (window.innerWidth <= 768) toggleSidebar();
 }
-
 function loadChat(chatId) {
     currentChatId = chatId;
     const chat = chats.find(c => c.id === chatId);
@@ -404,7 +322,6 @@ function loadChat(chatId) {
     renderChatList();
     if (window.innerWidth <= 768) toggleSidebar();
 }
-
 function toggleFavorite(chatId) {
     const index = favorites.indexOf(chatId);
     if (index > -1) favorites.splice(index, 1);
@@ -412,7 +329,6 @@ function toggleFavorite(chatId) {
     saveData();
     renderChatList();
 }
-
 function deleteChat(chatId) {
     if (!confirm('هل أنت متأكد من حذف هذه المحادثة؟')) return;
     chats = chats.filter(c => c.id !== chatId);
@@ -424,7 +340,6 @@ function deleteChat(chatId) {
     saveData();
     renderChatList();
 }
-
 function deleteAllChats() {
     if (!confirm('هل أنت متأكد من حذف جميع المحادثات؟')) return;
     chats = [];
@@ -434,7 +349,6 @@ function deleteAllChats() {
     chatContainer.innerHTML = `<div class="message-group"><div class="bot-message">${getWelcomeMessage()}</div></div>`;
     renderChatList();
 }
-
 function scrollToBottom(smooth = true) {
     setTimeout(() => {
         chatContainer.scrollTo({
@@ -443,21 +357,18 @@ function scrollToBottom(smooth = true) {
         });
     }, 10);
 }
-
 function useHint(text) {
     if (isGenerating) return;
     dreamInput.value = text;
     autoResizeTextarea();
     dreamInput.focus();
 }
-
 function updateUIState(generating) {
     isGenerating = generating;
     sendBtn.disabled = generating;
     hints.forEach(h => h.classList.toggle('disabled-hint', generating));
     sendBtn.innerHTML = generating ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-arrow-up"></i>';
 }
-
 function addMessageGroup(userText) {
     const group = document.createElement('div');
     group.className = 'message-group';
@@ -470,7 +381,6 @@ function addMessageGroup(userText) {
     chatContainer.appendChild(group);
     return botDiv;
 }
-
 function showTypingIndicator() {
     const ind = document.createElement('div');
     ind.className = 'message-group';
@@ -479,12 +389,10 @@ function showTypingIndicator() {
     chatContainer.appendChild(ind);
     scrollToBottom(true);
 }
-
 function hideTypingIndicator() {
     const ind = document.getElementById('typingIndicator');
     if (ind) ind.remove();
 }
-
 async function typeMessage(element, text, speed = 15) {
     element.innerHTML = '';
     for (let i = 0; i < text.length; i++) {
@@ -494,41 +402,36 @@ async function typeMessage(element, text, speed = 15) {
     }
     scrollToBottom(true);
 }
-
-// ================== الدالة الرئيسية (بدون أي تسريب) ==================
+// ================== الدالة الرئيسية (المعدلة) ==================
 async function processMessage(messageText) {
-    // تم إزالة كل الـ console.log التي تعرض البيانات الحساسة
     showTypingIndicator();
-    
+   
     try {
         const requestBody = {
             dream: messageText,
             userName: userProfile?.name || 'زائر',
             birthDate: userProfile?.birthDate || 'غير محدد'
         };
-        
-        // الـ fetch مع الرقم السري (لا يظهر في الكونسول)
+       
+        // الـ fetch مع الرقم السري
         const response = await fetch(WORKER_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Secret-Key': SECRET_KEY
+                'X-Secret-Key': SECRET_KEY // الرقم السري هنا
             },
             body: JSON.stringify(requestBody)
         });
-
         const responseText = await response.text();
+       
         hideTypingIndicator();
-
         if (!response.ok) {
-            throw new Error(`فشل الطلب: ${response.status}`);
+            throw new Error(`فشل الطلب: ${response.status} - ${responseText}`);
         }
-
         if (!responseText || responseText.trim() === '') {
             const defaultMessage = 'تم استلام حلمك بنجاح ✅ سيقوم المفسر بالرد قريباً.';
             const botElement = addMessageGroup(messageText);
             await typeMessage(botElement, defaultMessage, 15);
-
             if (!currentChatId) {
                 currentChatId = 'chat-' + Date.now();
                 chats.unshift({ id: currentChatId, title: messageText.substring(0, 30) + '...', messages: [], date: new Date().toISOString() });
@@ -542,20 +445,16 @@ async function processMessage(messageText) {
             }
             return;
         }
-
         let interpretation = responseText;
         if (responseText.trim().startsWith('{') || responseText.trim().startsWith('[')) {
             try {
                 const data = JSON.parse(responseText);
                 interpretation = data.interpretation || data.message || data.text || data.reply || data.response || JSON.stringify(data);
             } catch (e) {
-                // silent error
             }
         }
-
         const botElement = addMessageGroup(messageText);
         await typeMessage(botElement, interpretation, 15);
-
         if (!currentChatId) {
             currentChatId = 'chat-' + Date.now();
             chats.unshift({ id: currentChatId, title: messageText.substring(0, 30) + '...', messages: [], date: new Date().toISOString() });
@@ -567,15 +466,13 @@ async function processMessage(messageText) {
             if (!chat.title || chat.title === 'محادثة جديدة') chat.title = messageText.substring(0, 30) + '...';
             saveData();
         }
-
     } catch (error) {
         hideTypingIndicator();
-        let errorMessage = '❌ عذراً، حدث خطأ في الاتصال. الرجاء المحاولة مرة أخرى.';
+        let errorMessage = '❌ عذراً، حدث خطأ في الاتصال.\n🔍 التفاصيل: ' + error.message;
         const botElement = addMessageGroup(messageText);
         await typeMessage(botElement, errorMessage, 15);
     }
 }
-
 async function handleSend() {
     if (isGenerating) return;
     const dreamText = dreamInput.value.trim();
@@ -588,7 +485,6 @@ async function handleSend() {
     dreamInput.focus();
     renderChatList();
 }
-
 // ================== دوال الملف الشخصي ==================
 function populateDOBSelects() {
     const daySel = document.getElementById('birthDay');
@@ -618,7 +514,6 @@ function populateDOBSelects() {
         yearSel.appendChild(opt);
     }
 }
-
 function openProfile() {
     const modal = document.getElementById('profileModal');
     if (!userProfile) {
@@ -637,7 +532,6 @@ function openProfile() {
     }
     modal.style.display = 'flex';
 }
-
 function switchToEditMode() {
     document.getElementById('profileView').style.display = 'none';
     document.getElementById('profileEdit').style.display = 'block';
@@ -652,7 +546,6 @@ function switchToEditMode() {
         }
     }
 }
-
 function saveProfile() {
     const name = document.getElementById('userName').value.trim();
     const day = document.getElementById('birthDay').value;
@@ -667,7 +560,6 @@ function saveProfile() {
     updateWelcomeInCurrentChat();
     alert('✅ تم حفظ بياناتك بنجاح!');
 }
-
 function performLogout() {
     if (!confirm('هل أنت متأكد من تسجيل الخروج؟ سيتم حذف بياناتك وسيطلب منك التسجيل مرة أخرى.')) return;
     localStorage.removeItem('userProfile');
@@ -691,11 +583,9 @@ function performLogout() {
         modal.style.display = 'flex';
     }, 400);
 }
-
 function closeProfileModal() {
     document.getElementById('profileModal').style.display = 'none';
 }
-
 // ================== الأحداث (Event Listeners) ==================
 sendBtn.addEventListener('click', handleSend);
 dreamInput.addEventListener('keydown', e => {
@@ -704,12 +594,9 @@ dreamInput.addEventListener('keydown', e => {
         handleSend();
     }
 });
-
 populateDOBSelects();
 if (chats.length === 0) newChat();
-
 window.addEventListener('load', () => {
-    // تم إزالة كل الـ console.log التي تعرض البيانات الحساسة
     autoResizeTextarea();
     scrollToBottom(false);
     renderChatList();
@@ -723,14 +610,6 @@ window.addEventListener('load', () => {
         modal.style.display = 'flex';
     }
 });
-
-// تعطيل كل الـ console.log في الإنتاج (اختياري)
-if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    console.log = function() {};
-    console.warn = function() {};
-    console.error = function() {};
-}
 </script>
 </body>
 </html>
-
